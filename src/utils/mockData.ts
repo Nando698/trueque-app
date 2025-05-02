@@ -6,6 +6,7 @@ import {
     generarOfertas,
     generarOfertaEtiqueta,
     generarFavoritos,
+    generarUsuario,
   } from "./faker"
   
   const usuarios = generarUsuarios(5)
@@ -14,6 +15,7 @@ import {
   const ofertas = generarOfertas(12, usuarios, categorias)
   const ofertaEtiqueta = generarOfertaEtiqueta(ofertas, etiquetas)
   const favoritos = generarFavoritos(usuarios, ofertas)
+  const usuario = generarUsuario()
   
   export const mockData = {
     usuarios,
@@ -22,5 +24,6 @@ import {
     ofertas,
     ofertaEtiqueta,
     favoritos,
+    usuario
   }
   

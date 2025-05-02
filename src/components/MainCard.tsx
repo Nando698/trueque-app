@@ -6,6 +6,7 @@ import {
     Button,
     Typography,
   } from "@mui/material"
+
   
   type Oferta = {
     id: number
@@ -19,12 +20,19 @@ import {
   interface Props {
     data: Oferta
   }
+
+ 
   
   export default function OfferCard({ data }: Props) {
+    
+    
+
+    
     return (
       <Card sx={
         {   maxWidth: 500,
-            maxHeight: 600
+            maxHeight: 600,
+            marginTop: 5
         }
       } >
         <CardMedia

@@ -17,6 +17,20 @@ export function generarUsuarios(cantidad: number) {
   }))
 }
 
+// Genera usuario (uno) falso
+export function generarUsuario() {
+    return {
+      
+      nombre: faker.person.fullName(),
+      correo: faker.internet.email(),
+      password: faker.internet.password(), // solo para simular
+      rol: faker.helpers.arrayElement(['ADMIN', 'REGULAR']),
+      estado: faker.helpers.arrayElement(['ACTIVO', 'INACTIVO']),
+      fecha_creacion: faker.date.past().toISOString().split('T')[0],
+      avatar: faker.image.avatar()
+    }
+  }
+
 // Genera categorías y etiquetas
 export function generarCategorias(n = 5) {
   return Array.from({ length: n }).map((_, i) => ({
@@ -67,3 +81,6 @@ export function generarFavoritos(usuarios: Usuario[], ofertas: Oferta[]) {
   })
 }
 
+export function generarAvatar() {
+    return faker.image.avatar()
+}
