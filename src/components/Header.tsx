@@ -17,13 +17,13 @@ const Header: React.FC = () => {
   
         
         <form className="flex flex-wrap items-center gap-2 justify-center md:justify-start">
-          <MultipleSelectCheckmarks />
+          <MultipleSelectCheckmarks/>
           <TextField
             id="outlined-basic"
             label="Buscar..."
             variant="outlined"
             size="small"
-            sx={{ backgroundColor: "#5897d6", minWidth: "120px", flexGrow: 1, maxWidth: "300px" }}
+            sx={{ backgroundColor: "#5897d6", minWidth: "120px", flexGrow: 1, maxWidth: "300px", marginLeft: { sm:'8px' }, }}
           />
           <Button variant="contained">¡Vamos!</Button>
         </form>

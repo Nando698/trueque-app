@@ -1,15 +1,26 @@
+'use client'
 import React from 'react';
-import { mockData } from '@/utils/mockData';  // Solo para desarrollo
 
+import { useEffect, useState } from 'react'
+import { obtenerOfertas } from '../connect/ofertas'
 
 import { renderUtils } from '@/utils/render';
 
 const Main: React.FC = () => {
-  const { ofertas } = mockData;
+  const [ofertas, setOfertas] = useState([])
+
+
+  useEffect(() => {
+    obtenerOfertas()
+      .then(setOfertas)
+      .catch((error: any) => {
+        console.error('Error al obtener ofertas:', error)
+      })
+  }, [])
 
   return (
     <main className="bg-gray-800 min-h-screen grid">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-6 ">
     
         {renderUtils.renderizarOfertas(ofertas)}
         

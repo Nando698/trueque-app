@@ -2,7 +2,8 @@
 export default function Page() {
     return (
       <>
-        Admin page
+            
+Publicar page
       </>
   
   

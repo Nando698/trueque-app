@@ -1,3 +1,4 @@
+import { Categoria } from "@/interfaces/Categoria"
 import {
     Card,
     CardActions,
@@ -13,7 +14,7 @@ import {
     titulo: string
     descripcion: string
     img?: string
-    categoria: string
+    categoria: Categoria
     fecha_publicacion: string
   }
   
@@ -30,8 +31,8 @@ import {
     
     return (
       <Card sx={
-        {   maxWidth: 500,
-            maxHeight: 600,
+        {   maxWidth: 400,
+            maxHeight: 400,
             marginTop: 5
         }
       } >
@@ -54,13 +55,13 @@ import {
             {data.descripcion}
           </Typography>
           <Typography variant="caption" color="text.secondary" display="block" mt={1}>
-            Categoría: {data.categoria}
+            Categoría: {data.categoria.nombre}
           </Typography>
           <Typography variant="caption" color="text.secondary">
             Publicado: {data.fecha_publicacion}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{justifyContent: 'center'}}>
           <Button size="small">Ver más</Button>
           <Button size="small">Guardar</Button>
         </CardActions>

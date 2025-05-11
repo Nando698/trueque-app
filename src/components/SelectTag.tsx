@@ -16,6 +16,7 @@ const MenuProps = {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: 250,
+      
     },
   },
 };
@@ -46,7 +47,7 @@ export default function MultipleSelectCheckmarks() {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }} size='small'>
+      <FormControl sx={{ m: 1, width: 300}} size='small'>
         <InputLabel id="demo-multiple-checkbox-label">Categoria</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"

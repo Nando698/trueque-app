@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Menu, MenuItem, Button } from '@mui/material';
+import Link from 'next/link';
 
 const BasicMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -38,10 +39,10 @@ const BasicMenu = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}><p className="font-bold">Publicar</p></MenuItem>
-        <MenuItem onClick={handleClose}>Navegar ofertas</MenuItem>
-        <MenuItem onClick={handleClose}>Contacto</MenuItem>
-        <MenuItem onClick={handleClose}>Preguntas frecuentes</MenuItem>
+        <Link href={'/publicar'}><MenuItem onClick={handleClose}><p className="font-bold">Publicar</p></MenuItem></Link>
+        <Link href={'/ofertas'}><MenuItem onClick={handleClose}>Navegar ofertas</MenuItem></Link>
+        <Link href={'/faq'}><MenuItem onClick={handleClose}>F.A.Q.</MenuItem></Link>
+        <Link href={'/contacto'}><MenuItem onClick={handleClose}>Contacto</MenuItem></Link>
       </Menu>
     </div>
   );
