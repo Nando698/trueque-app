@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
           <a href="/" className="hover:underline">
             Inicio
           </a>
-          <a href="/FAQ" className="hover:underline">
+          <a href="/faq" className="hover:underline">
             Preguntas Frecuentes
           </a>
           <a href="#" className="hover:underline">

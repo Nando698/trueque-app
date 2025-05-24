@@ -16,7 +16,7 @@ export default function FAQContent() {
       </div>
       <div className="flex justify-center mt-10">
         <div className="w-[70%]">
-          <Accordion sx={{ backgroundColor: "#1F2937" }}>
+          <Accordion sx={{ backgroundColor: "#151c25" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -36,7 +36,7 @@ export default function FAQContent() {
       </div>
       <div className="flex justify-center mt-10">
         <div className="w-[70%]">
-          <Accordion sx={{ backgroundColor: "#1F2937" }}>
+          <Accordion sx={{ backgroundColor: "#151c25" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -55,7 +55,7 @@ export default function FAQContent() {
       </div>
       <div className="flex justify-center mt-10">
         <div className="w-[70%]">
-          <Accordion sx={{ backgroundColor: "#1F2937" }}>
+          <Accordion sx={{ backgroundColor: "#151c25" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -74,7 +74,7 @@ export default function FAQContent() {
       </div>
       <div className="flex justify-center mt-10">
         <div className="w-[70%]">
-          <Accordion sx={{ backgroundColor: "#1F2937" }}>
+          <Accordion sx={{ backgroundColor: "#151c25" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -94,7 +94,7 @@ export default function FAQContent() {
       </div>
       <div className="flex justify-center mt-10">
         <div className="w-[70%]">
-          <Accordion sx={{ backgroundColor: "#1F2937" }}>
+          <Accordion sx={{ backgroundColor: "#151c25" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -113,7 +113,7 @@ export default function FAQContent() {
       </div>
       <div className="flex justify-center mt-10">
         <div className="w-[70%]">
-          <Accordion sx={{ backgroundColor: "#1F2937" }}>
+          <Accordion sx={{ backgroundColor: "#151c25" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -131,7 +131,7 @@ export default function FAQContent() {
       </div>
       <div className="flex justify-center mt-10 pb-8">
         <div className="w-[70%]">
-          <Accordion sx={{ backgroundColor: "#1F2937" }}>
+          <Accordion sx={{ backgroundColor: "#151c25" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
