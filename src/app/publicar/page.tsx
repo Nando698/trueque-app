@@ -1,9 +1,11 @@
+import PublicarOferta from "@/components/Publicar";
 
 export default function Page() {
     return (
       <>
-            
-Publicar page
+             <div className="bg-white">
+< PublicarOferta />
+</div>
       </>
   
   

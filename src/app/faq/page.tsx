@@ -1,16 +1,11 @@
-import Header from '@/components/Header'
-import FAQContent from '@/components/FAQContent'
-import Footer from '@/components/Footer'
+import FAQContent from "@/components/FAQContent"
 
 export default function Page() {
   return (
     <>
-      <Header />
+    <div className="bg-gray-800">
       <FAQContent />
-      <Footer />
+      </div>
     </>
-
-
-
   )
 }

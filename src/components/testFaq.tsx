@@ -5,7 +5,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-export default function FAQContent() {
+export default function AccordionUsage() {
   return (
     <>
       <div className="flex flex-col items-center text-center pt-10">
