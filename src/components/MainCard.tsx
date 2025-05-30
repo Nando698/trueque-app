@@ -13,7 +13,7 @@ import {
     id: number
     titulo: string
     descripcion: string
-    img?: string
+    imagenes: string[]
     categoria: Categoria
     fecha_publicacion: string
   }
@@ -39,7 +39,7 @@ import {
         <CardMedia
           component="img"
           height="120"
-          image={data.img || "https://via.placeholder.com/300"}
+          image={data.imagenes?.[0]}
           alt={data.titulo}
           sx={{ 
             height: 140,

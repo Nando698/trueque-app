@@ -13,7 +13,7 @@ const Main: React.FC = () => {
   useEffect(() => {
     obtenerOfertas()
       .then(setOfertas)
-      .catch((error: any) => {
+      .catch((error: Error) => {
         console.error('Error al obtener ofertas:', error)
       })
   }, [])

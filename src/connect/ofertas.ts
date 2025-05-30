@@ -6,3 +6,28 @@ export const obtenerOfertas = async () => {
   const res = await axios.get(`http://localhost:3001/ofertas`)
   return res.data
 }
+
+
+
+
+export const crearOferta = async (
+  titulo: string,
+  descripcion: string,
+  files: FileList | null
+) => {
+  const formData = new FormData();
+  formData.append('titulo', titulo);
+  formData.append('descripcion', descripcion);
+
+  if (files) {
+    for (let i = 0; i < files.length; i++) {
+      formData.append('imagenes', files[i]);
+    }
+  }
+
+  const response = await axios.post('http://localhost:3001/ofertas', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+  return response.data;
+};
