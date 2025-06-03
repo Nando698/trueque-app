@@ -2,10 +2,12 @@ import { Oferta } from "@/interfaces/Oferta";
 import OfferCard from "../components/MainCard";
 
 
-function renderizarOfertas(ofertas: any[]) {
+function renderizarOfertas(ofertas: Oferta[]) {
 
     console.log('ofertas desde renderizarOfertas', ofertas)
     return (
+        
+        
         ofertas.map((oferta: Oferta) => (
                       
             

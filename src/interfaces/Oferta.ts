@@ -1,9 +1,11 @@
+import { Categoria } from "./Categoria"
+
 export interface Oferta {
     id: number
     titulo: string
     descripcion: string
-    imagen?: string
-    categoria: string
-    fecha_publicacion: string
+    imagenes: string[]
+    categoria: Categoria
+    fechaPublicacion: string
     estado: string
   }
