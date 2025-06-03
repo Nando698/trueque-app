@@ -19,7 +19,7 @@ const Main: React.FC = () => {
   }, [])
 
   return (
-    <main className="bg-gray-800 min-h-screen grid">
+    <main className="bg-gray-800 min-h-screen grid px-6 pb-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-6 ">
     
         {renderUtils.renderizarOfertas(ofertas)}

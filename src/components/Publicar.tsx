@@ -18,13 +18,18 @@ const PublicarOferta: React.FC = () => {
     try {
       const data = await crearOferta(titulo, descripcion, files);
       console.log('Oferta creada:', data);
+      setTitulo("");
+      setDescripcion("");
+      setFiles(null);
     } catch (err) {
       console.error('Error al crear la oferta:', err);
     }
   };
   
   
-  
+   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFiles(e.target.files);
+  };
   
   
   
@@ -33,6 +38,7 @@ const PublicarOferta: React.FC = () => {
   return (
     <Box
       component="form"
+      onSubmit={handleSubmit}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -53,7 +59,7 @@ const PublicarOferta: React.FC = () => {
 
       <Button variant="outlined" component="label">
         Subir imágenes
-        <input hidden accept="image/*" multiple type="file" />
+        <input hidden accept="image/*" multiple type="file" onChange={handleFileChange}/>
       </Button>
 
       <TextField

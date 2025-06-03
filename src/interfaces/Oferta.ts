@@ -6,6 +6,6 @@ export interface Oferta {
     descripcion: string
     imagenes: string[]
     categoria: Categoria
-    fecha_publicacion: string
+    fechaPublicacion: string
     estado: string
   }
