@@ -3,14 +3,30 @@ import React from 'react';
 
 import { useEffect, useState } from 'react'
 import { obtenerOfertas } from '../connect/ofertas'
-
 import { renderUtils } from '@/utils/render';
+import { validarToken } from '@/connect/auth';
+
 
 const Main: React.FC = () => {
   const [ofertas, setOfertas] = useState([])
 
+  
 
   useEffect(() => {
+    
+     const checkAuth = async () => {
+    const valido = await validarToken();
+    if (!valido) {
+      window.location.href = '/login';
+    }
+  };
+
+  checkAuth();
+    
+    
+    
+
+
     obtenerOfertas()
       .then(setOfertas)
       .catch((error: Error) => {

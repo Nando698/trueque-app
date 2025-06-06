@@ -1,4 +1,5 @@
 'use client'
+import { loguearse } from '@/connect/auth'
 import React from 'react'
 
 import { useState } from 'react'
@@ -7,10 +8,12 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const manejarSubmit = (e: React.FormEvent) => {
+  const manejarSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Login:', { email, password })
-    // Acá harías la petición al backend
+    const ok = await loguearse(email, password);
+    if (ok) {
+    window.location.href = '/';
+  } 
   }
 
   return (

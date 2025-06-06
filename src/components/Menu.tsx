@@ -5,6 +5,7 @@
 import React from 'react';
 import { Menu, MenuItem, Button } from '@mui/material';
 import Link from 'next/link';
+import { logOut } from '@/connect/auth';
 
 const BasicMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -28,7 +29,7 @@ const BasicMenu = () => {
         onClick={handleClick}
         variant="outlined"
       >
-        <p className="font-black">Comencemos!</p>
+        <p className="font-black">Menu</p>
       </Button>
       <Menu
         id="basic-menu"
@@ -43,6 +44,7 @@ const BasicMenu = () => {
         <Link href={'/ofertas'}><MenuItem onClick={handleClose}>Navegar ofertas</MenuItem></Link>
         <Link href={'/faq'}><MenuItem onClick={handleClose}>F.A.Q.</MenuItem></Link>
         <Link href={'/contacto'}><MenuItem onClick={handleClose}>Contacto</MenuItem></Link>
+        <Link href={'/login'}><MenuItem onClick={logOut}>Logout</MenuItem></Link>
       </Menu>
     </div>
   );

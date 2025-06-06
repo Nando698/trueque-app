@@ -10,7 +10,7 @@ import { usePathname, useRouter } from 'next/navigation';
 const Header: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const showSearch = pathname !== '/login' && pathname !== '/register' && pathname !== '/publicar';
+  const showSearch = pathname !== '/login' && pathname !== '/register';
 
   const [keywords, setKeywords] = useState('');
   const [categorias, setCategorias] = useState<string[]>([]); // esto dependerá del SelectTag
@@ -27,6 +27,7 @@ const Header: React.FC = () => {
       query.set('keywords', keywords.trim());
     }
 
+    
     router.push(`/ofertas/buscar?${query.toString()}`);
   };
 
@@ -55,12 +56,17 @@ const Header: React.FC = () => {
           />
           <Button variant="contained" type="submit">Buscar</Button>
         </form>
-      )}
-
+      )}  
+    {showSearch && (
       <div className="flex items-center justify-center md:justify-end gap-3">
         <BasicMenu />
+        <p>Bienvenido {localStorage.getItem('nombre')}</p>
         <Avatar alt="Remy Sharp" />
       </div>
+
+      )   }
+
+    
     </header>
   );
 };

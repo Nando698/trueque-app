@@ -2,6 +2,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { manejarSubmit } from '../connect/register'
+import { registerFunction } from '@/connect/auth'
 
 
 
@@ -10,12 +11,16 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
- 
+ const manejarSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  await registerFunction(name, email, password);
+  window.location.href = '/login';
+};
   
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-800">
-      <form onSubmit={(e) => manejarSubmit(e, name, email, password)} className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
+      <form onSubmit={manejarSubmit} className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-black">Registrarse</h2>
 
         <div className="mb-4">

@@ -16,7 +16,7 @@ const PublicarOferta: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await crearOferta(titulo, descripcion, files);
+      const data = await crearOferta(titulo, descripcion, files, 6, 'ACTIVA', 3 );
       console.log('Oferta creada:', data);
       setTitulo("");
       setDescripcion("");
