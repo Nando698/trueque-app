@@ -2,20 +2,20 @@ import { Oferta } from "@/interfaces/Oferta";
 import OfferCard from "../components/MainCard";
 
 
-function renderizarOfertas(ofertas: Oferta[]) {
+function renderizarOfertas(ofertas?: Oferta[]) {
+  if (!ofertas || ofertas.length === 0) {
+    return <p>No hay ofertas disponibles.</p>;
+  }
 
-    console.log('ofertas desde renderizarOfertas', ofertas)
-    return (
-        
-        
-        ofertas.map((oferta: Oferta) => (
-                      
-            
-            <OfferCard key={oferta.id} data={oferta} />
-           
-        ))
-    );
+  return (
+    <>
+      {ofertas.map((oferta) => (
+        <OfferCard key={oferta.id} data={oferta} />
+      ))}
+    </>
+  );
 }
+
 
 
 export const renderUtils = {

@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import axios from 'axios';
+import { obtenerCategorias } from '@/connect/categorias';
 
 type Categoria = {
   id: number;
@@ -24,16 +25,17 @@ export default function MultipleSelectCheckmarks({ onChange }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
 
   useEffect(() => {
-     const obtenerCategorias = async () => {
+    const fetchData = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/categorias');
-      setCategorias(res.data);
-    } catch (error) {
-      console.error('Error al cargar categorías:', error);
+      const data = await obtenerCategorias();
+      setCategorias(data);
+    } catch (err) {
+      console.error("Error al obtener categorias!", err);
     }
   };
 
-  obtenerCategorias();
+  fetchData();
+
   }, []);
 
   const handleChange = (event: any) => {

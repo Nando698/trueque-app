@@ -14,7 +14,7 @@
 //         }}
 //       />
 //       
-
+import { jwtDecode } from "jwt-decode";
 import { Categoria } from "@/interfaces/Categoria";
 import {
   Card,
@@ -26,13 +26,17 @@ import {
   IconButton,
   MobileStepper,
 } from "@mui/material";
-import { useState } from "react";
+import {  useEffect, useState } from "react";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { TokenPayload } from "@/interfaces/TokenPayLoad";
+import { borrarOferta } from "@/connect/ofertas";
+import { guardarFavorito } from "@/connect/favs";
 
 type Oferta = {
   id: number;
   titulo: string;
   descripcion: string;
+  cambio: string;
   imagenes: string[];
   categoria: Categoria;
   fechaPublicacion: string;
@@ -41,6 +45,16 @@ type Oferta = {
 interface Props {
   data: Oferta;
 }
+
+
+const token = localStorage.getItem("token");
+let esAdmin = false;
+
+if (token) {
+  const decoded = jwtDecode<TokenPayload>(token);
+  esAdmin = decoded.rol === "ADMIN";
+}
+
 
 export default function OfferCard({ data }: Props) {
   const soloFecha = data.fechaPublicacion.split("T")[0] ?? "Fecha no disponible";
@@ -55,6 +69,9 @@ export default function OfferCard({ data }: Props) {
   const handleBack = () => {
     setActiveStep((prev) => (prev - 1 + maxSteps) % maxSteps);
   };
+
+
+  
 
   return (
     <Card sx={{
@@ -171,7 +188,11 @@ export default function OfferCard({ data }: Props) {
       </CardContent>
       <CardActions sx={{ justifyContent: "center", mt: "auto", mb: 2 }}>
         <Button size="small">Ver más</Button>
-        <Button size="small">Guardar</Button>
+        <Button size="small" onClick={() => guardarFavorito(data.id)}>Guardar</Button>
+        {esAdmin && (
+  <Button color="error" size="small" onClick={() => borrarOferta(data.id)} >Eliminar</Button>
+)}
+
       </CardActions>
     </Card>
   );
