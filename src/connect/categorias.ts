@@ -8,3 +8,33 @@ export const obtenerCategorias = async () => {
       console.error('Error al cargar categorías:', error);
     }
   };
+
+
+
+  export const eliminarCategoria = async (id: number) => {
+
+    try {
+
+      const res = await axios.delete(`http://localhost:3001/categorias/${id}`)
+
+    } catch (e) {
+      console.error('Error al eliminar categoría:', e);
+
+    }
+
+
+  };
+
+  export const crearCategoria = async (nombre: string) => {
+
+    try {
+
+      const res = await axios.post(`http://localhost:3001/categorias/`,{nombre})
+
+    } catch (e) {
+      console.error('Error al eliminar categoría:', e);
+
+    }
+
+
+  };
