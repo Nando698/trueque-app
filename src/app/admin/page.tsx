@@ -5,8 +5,7 @@ import { obtenerUsuarios } from '@/connect/users';
 import { Usuario } from '@/interfaces/Usuario';
 import { Categoria } from '@/interfaces/Categoria';
 import {
-  Container, Typography, Box, Paper, Button, List, ListItem, ListItemText,
-  Divider, Stack, TextField, Drawer, ListItemButton, IconButton, AppBar, Toolbar
+  Container, Typography, Box, Paper, Button, List, ListItem, ListItemText, Stack, TextField, Drawer, ListItemButton, IconButton, AppBar, Toolbar
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';

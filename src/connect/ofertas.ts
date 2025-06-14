@@ -22,6 +22,16 @@ export const borrarOferta = async (id:number) => {
 }
 
 
+export const obtenerUnaOferta = async (id:number) => {
+  const res = await axios.get(`http://localhost:3001/ofertas/${id}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  return res.data
+}
+
+
 export const crearOferta = async (
   titulo: string,
   descripcion: string,

@@ -1,19 +1,4 @@
-// version anterior imagenes
-
-//       <CardMedia
-//         component="img"
-//         image={data.imagenes?.[0]}
-//         alt={data.titulo}
-//         sx={{
-//           height: 140,
-//           objectFit: "contain", // Mostrar toda la imagen sin recortarla
-//           backgroundColor: "#fff", // Fondo blanco por si la imagen no ocupa todo
-//           display: "flex",
-//           justifyContent: "center",
-//           alignItems: "center",
-//         }}
-//       />
-//       
+     
 import { jwtDecode } from "jwt-decode";
 import { Categoria } from "@/interfaces/Categoria";
 import {
@@ -25,6 +10,7 @@ import {
   Box,
   IconButton,
   MobileStepper,
+  Link,
 } from "@mui/material";
 import {  useEffect, useState } from "react";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
@@ -187,7 +173,7 @@ export default function OfferCard({ data }: Props) {
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: "center", mt: "auto", mb: 2 }}>
-        <Button size="small">Ver más</Button>
+        <Button size="small" component={Link} href={`/publicacion/${data.id}`}>Ver más</Button>
         <Button size="small" onClick={() => guardarFavorito(data.id)}>Guardar</Button>
         {esAdmin && (
   <Button color="error" size="small" onClick={() => borrarOferta(data.id)} >Eliminar</Button>

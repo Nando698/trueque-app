@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   const showSearch = pathname !== '/login' && pathname !== '/register';
 
   const [keywords, setKeywords] = useState('');
-  const [categorias, setCategorias] = useState<string[]>([]); // esto dependerá del SelectTag
+  const [categorias, setCategorias] = useState<string[]>([]); 
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ const Header: React.FC = () => {
     {showSearch && (
       <div className="flex items-center justify-center md:justify-end gap-3">
         <BasicMenu />
-        <p>Bienvenido {localStorage.getItem('nombre')}</p>
+        <p>Bienvenido {localStorage.getItem('nombre') ??  ''}</p>
         <Avatar alt="Remy Sharp" />
       </div>
 
