@@ -8,13 +8,7 @@ import { Categoria } from "@/interfaces/Categoria";
 import { jwtDecode } from "jwt-decode";
 import { TokenPayload } from "@/interfaces/TokenPayLoad";
 
-const token = localStorage.getItem('token');
-let  usId:number;
-if(token){
 
-    const decoded = jwtDecode<TokenPayload>(token);
-     usId = decoded.sub;
-  }
 
 
 const PublicarOferta: React.FC = () => {
@@ -24,13 +18,20 @@ const PublicarOferta: React.FC = () => {
   const [files, setFiles] = useState<FileList | null>(null);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [categoria, setCategoria] = useState(0);
-  
+  const [userId, setUserId] = useState<number | null>(null);
   
   
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (userId === null) {
+    console.error("Usuario no identificado");
+    return;
+  }
+
+
     try {
       const data = await crearOferta(
         titulo,
@@ -39,7 +40,7 @@ const PublicarOferta: React.FC = () => {
         files,
         categoria,
         "ACTIVA",
-        usId
+        userId
       );
       console.log("Oferta creada:", data);
       setTitulo("");
@@ -53,6 +54,14 @@ const PublicarOferta: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFiles(e.target.files);
   };
+
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    const decoded = jwtDecode<TokenPayload>(token);
+    setUserId(decoded.sub);
+  }
+}, []);
 
 
   useEffect(() => {

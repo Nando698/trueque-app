@@ -1,4 +1,5 @@
-     
+'use client';
+
 import { jwtDecode } from "jwt-decode";
 import { Categoria } from "@/interfaces/Categoria";
 import {
@@ -12,11 +13,12 @@ import {
   MobileStepper,
   Link,
 } from "@mui/material";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { TokenPayload } from "@/interfaces/TokenPayLoad";
 import { borrarOferta } from "@/connect/ofertas";
 import { guardarFavorito } from "@/connect/favs";
+import Image from "next/image";
 
 type Oferta = {
   id: number;
@@ -32,21 +34,22 @@ interface Props {
   data: Oferta;
 }
 
-
-const token = localStorage.getItem("token");
-let esAdmin = false;
-
-if (token) {
-  const decoded = jwtDecode<TokenPayload>(token);
-  esAdmin = decoded.rol === "ADMIN";
-}
-
-
 export default function OfferCard({ data }: Props) {
+  const [esAdmin, setEsAdmin] = useState(false);
   const soloFecha = data.fechaPublicacion.split("T")[0] ?? "Fecha no disponible";
   const imagenes = data.imagenes ?? [];
   const maxSteps = imagenes.length;
   const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decoded = jwtDecode<TokenPayload>(token);
+        setEsAdmin(decoded.rol === "ADMIN");
+      }
+    }
+  }, []);
 
   const handleNext = () => {
     setActiveStep((prev) => (prev + 1) % maxSteps);
@@ -56,31 +59,38 @@ export default function OfferCard({ data }: Props) {
     setActiveStep((prev) => (prev - 1 + maxSteps) % maxSteps);
   };
 
-
-  
-
   return (
-    <Card sx={{
-    maxWidth: 400,
-    height: 400,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    mt: 5,
-  }}>
+    <Card
+      sx={{
+        maxWidth: 400,
+        height: 400,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        mt: 5,
+      }}
+    >
       {/* Slider de imágenes */}
       <Box position="relative" width="100%" height={180} bgcolor="#fff">
         {imagenes.length > 0 ? (
           <>
-            <img
-              src={imagenes[activeStep]}
-              alt={`Imagen ${activeStep + 1}`}
-              style={{
+            <Box
+              sx={{
+                position: "relative",
                 width: "100%",
                 height: "100%",
-                objectFit: "contain",
               }}
-            />
+            >
+              <Image
+                src={imagenes[activeStep]}
+                alt={`Imagen ${activeStep + 1}`}
+                fill
+                style={{
+                  objectFit: "contain",
+                }}
+              />
+            </Box>
+
             {maxSteps > 1 && (
               <>
                 <IconButton
@@ -109,6 +119,7 @@ export default function OfferCard({ data }: Props) {
                 </IconButton>
               </>
             )}
+
             <MobileStepper
               variant="dots"
               steps={maxSteps}
@@ -134,17 +145,17 @@ export default function OfferCard({ data }: Props) {
 
       <CardContent>
         <Typography
-      gutterBottom
-      variant="h6"
-      component="div"
-      sx={{
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        display: "-webkit-box",
-        WebkitLineClamp: 1,
-        WebkitBoxOrient: "vertical",
-      }}
-    >
+          gutterBottom
+          variant="h6"
+          component="div"
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
           {data.titulo}
         </Typography>
         <Typography
@@ -172,13 +183,23 @@ export default function OfferCard({ data }: Props) {
           Publicado: {soloFecha}
         </Typography>
       </CardContent>
-      <CardActions sx={{ justifyContent: "center", mt: "auto", mb: 2 }}>
-        <Button size="small" component={Link} href={`/publicacion/${data.id}`}>Ver más</Button>
-        <Button size="small" onClick={() => guardarFavorito(data.id)}>Guardar</Button>
-        {esAdmin && (
-  <Button color="error" size="small" onClick={() => borrarOferta(data.id)} >Eliminar</Button>
-)}
 
+      <CardActions sx={{ justifyContent: "center", mt: "auto", mb: 2 }}>
+        <Button size="small" component={Link} href={`/publicacion/${data.id}`}>
+          Ver más
+        </Button>
+        <Button size="small" onClick={() => guardarFavorito(data.id)}>
+          Guardar
+        </Button>
+        {esAdmin && (
+          <Button
+            color="error"
+            size="small"
+            onClick={() => borrarOferta(data.id)}
+          >
+            Eliminar
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

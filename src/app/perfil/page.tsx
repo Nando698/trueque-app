@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Grid,
+  
   Card,
   CardMedia,
   CardContent,
@@ -10,7 +10,7 @@ import {
   Button,
 } from "@mui/material";
 import { Avatar } from "@mui/material";
-
+import Grid from '@mui/material/Grid'; 
 const Perfil: React.FC = () => {
   const perfil = {
     nombre: "Juan Pérez",
@@ -62,7 +62,7 @@ const Perfil: React.FC = () => {
         </h2>
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
           {publicaciones.map((pub) => (
-            <Grid item xs={12} sm={6} md={4} key={pub.id}>
+            <Grid  size={8} key={pub.id}>
               <Card>
                 <CardMedia
                   component="img"
@@ -89,7 +89,7 @@ const Perfil: React.FC = () => {
         </h2>
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
           {publicaciones.map((pub) => (
-            <Grid item xs={12} sm={6} md={4} key={pub.id}>
+            <Grid size={8} key={pub.id}>
               <Card>
                 <CardMedia
                   component="img"

@@ -5,10 +5,9 @@ import { useEffect, useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
-import axios from 'axios';
 import { obtenerCategorias } from '@/connect/categorias';
 
 type Categoria = {
@@ -38,8 +37,8 @@ export default function MultipleSelectCheckmarks({ onChange }: Props) {
 
   }, []);
 
-  const handleChange = (event: any) => {
-    const value = event.target.value;
+  const handleChange = (event:   SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
     setSelected(value);
     onChange(value);
   };

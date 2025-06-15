@@ -1,9 +1,10 @@
-import BuscarResultados from "@/components/BuscarResultados";
+import { Suspense } from 'react';
+import BuscarResultados from '../../../components/BuscarResultados';
 
-export default function Page() {
+export default function BuscarPage() {
   return (
-    <div className="bg-gray-800 min-h-screen text-white">
+    <Suspense fallback={<p className="text-white p-4">Cargando resultados...</p>}>
       <BuscarResultados />
-    </div>
+    </Suspense>
   );
 }

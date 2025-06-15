@@ -15,7 +15,7 @@ export const obtenerCategorias = async () => {
 
     try {
 
-      const res = await axios.delete(`http://localhost:3001/categorias/${id}`)
+      await axios.delete(`http://localhost:3001/categorias/${id}`)
 
     } catch (e) {
       console.error('Error al eliminar categoría:', e);
@@ -29,7 +29,7 @@ export const obtenerCategorias = async () => {
 
     try {
 
-      const res = await axios.post(`http://localhost:3001/categorias/`,{nombre})
+      await axios.post(`http://localhost:3001/categorias/`,{nombre})
 
     } catch (e) {
       console.error('Error al eliminar categoría:', e);

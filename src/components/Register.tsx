@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
-import { useState, useEffect } from 'react'
-import { manejarSubmit } from '../connect/register'
+import { useState} from 'react'
+
 import { registerFunction } from '@/connect/auth'
 
 

@@ -16,6 +16,7 @@ export const validarToken = async (): Promise<boolean> => {
 
     return res.data === true;
   } catch (error) {
+    console.log("Error al validar token",error)
     return false;
   }
 };
@@ -55,7 +56,7 @@ export const loguearse = async (correo: string, password: string): Promise<boole
 
 export const registerFunction = async (nombre:string, correo: string, password: string): Promise<void> => {
   try {
-    const response = await axios.post('http://localhost:3001/usuarios', {
+     await axios.post('http://localhost:3001/usuarios', {
       nombre,
         correo,
       password,

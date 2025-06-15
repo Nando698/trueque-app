@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button, Avatar } from '@mui/material';
 import BasicMenu from './Menu';
 import MultipleSelectCheckmarks from './SelectTag';
@@ -14,6 +14,8 @@ const Header: React.FC = () => {
 
   const [keywords, setKeywords] = useState('');
   const [categorias, setCategorias] = useState<string[]>([]); 
+  const [nombreUsuario, setNombreUsuario] = useState<string>('');;
+
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +32,16 @@ const Header: React.FC = () => {
     
     router.push(`/ofertas/buscar?${query.toString()}`);
   };
+
+  useEffect( () => {
+    const nombre = localStorage.getItem("nombre");
+    if(nombre){
+      setNombreUsuario(nombre)
+    }
+
+  },[]);
+
+
 
   return (
     <header className="bg-blue-400 border-b border-emerald-700 px-4 py-3 flex flex-col gap-4 sm:gap-5 md:flex-row md:items-center md:justify-between">
@@ -60,7 +72,7 @@ const Header: React.FC = () => {
     {showSearch && (
       <div className="flex items-center justify-center md:justify-end gap-3">
         <BasicMenu />
-        <p>Bienvenido {localStorage.getItem('nombre') ??  ''}</p>
+        <p>Bienvenido {nombreUsuario}</p>
         <Avatar alt="Remy Sharp" />
       </div>
 
