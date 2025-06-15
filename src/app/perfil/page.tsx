@@ -49,10 +49,12 @@ const Perfil: React.FC = () => {
     }
   };
 
+
   return (
     <div className="bg-gray-800 p-6">
       <div className="mx-auto bg-white rounded-lg shadow-lg p-6 lg:max-w-[1000px]">
         <div className="flex items-center mb-6">
+
           <Avatar alt="Avatar" sx={{ height: 75, width: 75 }} />
           <div className="ml-4">
             <h1 className="text-2xl font-bold text-black">{perfil?.nombre}</h1>
@@ -111,6 +113,7 @@ const Perfil: React.FC = () => {
             <IconButton onClick={() => scroll(scrollRef2, "right")}> <ArrowForwardIos /> </IconButton>
           </Box>
         </section>
+
       </div>
     </div>
   );
