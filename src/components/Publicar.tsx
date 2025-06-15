@@ -1,6 +1,13 @@
 "use client";
 
-import { TextField, Button, Typography, Box, Select, MenuItem } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { crearOferta } from "@/connect/ofertas";
 import { useEffect, useState } from "react";
 import { obtenerCategorias } from "@/connect/categorias";
@@ -8,8 +15,6 @@ import { Categoria } from "@/interfaces/Categoria";
 import { jwtDecode } from "jwt-decode";
 import { TokenPayload } from "@/interfaces/TokenPayLoad";
 import ModalGenerico from "./modal";
-
-
 
 const PublicarOferta: React.FC = () => {
   const [titulo, setTitulo] = useState("");
@@ -19,20 +24,14 @@ const PublicarOferta: React.FC = () => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [categoria, setCategoria] = useState(0);
   const [userId, setUserId] = useState<number | null>(null);
-  
-
-  
-  
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (userId === null) {
-    console.error("Usuario no identificado");
-    return;
-  }
-
+      console.error("Usuario no identificado");
+      return;
+    }
 
     try {
       const data = await crearOferta(
@@ -45,11 +44,11 @@ const PublicarOferta: React.FC = () => {
         userId
       );
       console.log("Oferta creada:", data);
-      
+
       setTitulo("");
       setDescripcion("");
       setFiles(null);
-      window.location.href = '/';
+      window.location.href = "/";
     } catch (err) {
       console.error("Error al crear la oferta:", err);
     }
@@ -60,13 +59,12 @@ const PublicarOferta: React.FC = () => {
   };
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    const decoded = jwtDecode<TokenPayload>(token);
-    setUserId(decoded.sub);
-  }
-}, []);
-
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode<TokenPayload>(token);
+      setUserId(decoded.sub);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,7 +76,7 @@ const PublicarOferta: React.FC = () => {
       }
     };
 
-    fetchData()
+    fetchData();
   }, []);
 
   return (
@@ -122,18 +120,13 @@ const PublicarOferta: React.FC = () => {
         label="Categoria"
         onChange={(e) => setCategoria(e.target.value)}
       >
-
-      {categorias.map((categoria) => {
-  
-  return (
-    <MenuItem key={categoria.id} value={categoria.id}>
-      {categoria.nombre}
-    </MenuItem>
-  );
-})}
-
-
-
+        {categorias.map((categoria) => {
+          return (
+            <MenuItem key={categoria.id} value={categoria.id}>
+              {categoria.nombre}
+            </MenuItem>
+          );
+        })}
       </Select>
 
       <Button variant="outlined" component="label">
@@ -147,6 +140,15 @@ const PublicarOferta: React.FC = () => {
         />
       </Button>
 
+      {/* Lógica para ver cantidad de imágenes que selecciono*/}
+
+      {files && files.length > 0 && (
+        <Typography variant="body2" color="textSecondary">
+          {files.length} imagen{files.length > 1 ? "es" : ""} seleccionada
+          {files.length > 1 ? "s" : ""}
+          (máximo 3)
+        </Typography>
+      )}
       <TextField
         label="¿Qué te gustaría recibir a cambio?"
         multiline
@@ -159,7 +161,6 @@ const PublicarOferta: React.FC = () => {
       <Button variant="contained" color="primary" type="submit">
         Publicar
       </Button>
-      
     </Box>
   );
 };
