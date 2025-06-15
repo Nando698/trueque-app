@@ -59,6 +59,8 @@ const BasicMenu = () => {
         <Link href={'/publicar'}><MenuItem onClick={handleClose}><p className="font-bold">Publicar</p></MenuItem></Link>
         <Link href={'/ofertas'}><MenuItem onClick={handleClose}>Navegar ofertas</MenuItem></Link>
         <Link href={'/faq'}><MenuItem onClick={handleClose}>F.A.Q.</MenuItem></Link>
+        <Link href={'/perfil'}><MenuItem onClick={handleClose}>Mi perfil</MenuItem></Link>
+
         <Link href={'/contacto'}><MenuItem onClick={handleClose}>Contacto</MenuItem></Link>
         {esAdmin && (<Link href={'/admin'}><MenuItem onClick={handleClose}>Panel de control</MenuItem></Link>)}
         <Link href={'/login'}><MenuItem onClick={logOut}>Logout</MenuItem></Link>

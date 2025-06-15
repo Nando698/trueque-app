@@ -110,7 +110,7 @@ const OfertaDetalle = () => {
               src={oferta.imagenes[imagenActiva]}
               alt={`Imagen ${imagenActiva + 1}`}
               fill
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: 'contain' }}
             />
 
             {imagenActiva > 0 && (

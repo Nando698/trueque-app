@@ -11,6 +11,18 @@ export const obtenerOfertas = async () => {
   return res.data
 }
 
+export const obtenerOfertasPropias = async (id:number) => {
+  const res = await axios.get(`http://localhost:3001/ofertas?usuario_id=${id}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  })
+  return res.data
+}
+
+
+
+
 export const borrarOferta = async (id:number) => {
   const res = await axios.delete(`http://localhost:3001/ofertas/${id}`,{
     headers: {

@@ -9,3 +9,16 @@ export const guardarFavorito = async (ofertaId: number) => {
     },
   });
 };
+
+
+
+
+export const obtenerFavoritos = async () => {
+  const token = localStorage.getItem("token");
+
+  return await axios.get(`http://localhost:3001/favoritos/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

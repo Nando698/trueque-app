@@ -20,8 +20,8 @@ import { borrarOferta } from "@/connect/ofertas";
 import { guardarFavorito } from "@/connect/favs";
 import Image from "next/image";
 import { Oferta } from "@/interfaces/Oferta";
-
-
+import ModalReporte from '../components/modalReporte';
+import { reportarOferta } from "@/connect/reporte";
 
 interface Props {
   data: Oferta;
@@ -33,6 +33,8 @@ export default function OfferCard({ data }: Props) {
   const imagenes = data.imagenes ?? [];
   const maxSteps = imagenes.length;
   const [activeStep, setActiveStep] = useState(0);
+  const [modalAbierto, setModalAbierto] = useState(false);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -50,6 +52,18 @@ export default function OfferCard({ data }: Props) {
 
   const handleBack = () => {
     setActiveStep((prev) => (prev - 1 + maxSteps) % maxSteps);
+  };
+
+
+  const handleReportar = async (motivo: string) => {
+    try {
+      await reportarOferta(data.id, motivo);
+    } catch (e) {
+      console.error('Error al reportar:', e);
+      alert('No se pudo enviar el reporte');
+    } finally {
+      setModalAbierto(false);
+    }
   };
 
   return (
@@ -192,8 +206,18 @@ export default function OfferCard({ data }: Props) {
           >
             Eliminar
           </Button>
+          
         )}
+
+    <Button size="small" component={Link}  onClick={() => setModalAbierto(true)}>
+          Reportar
+        </Button>
       </CardActions>
+      <ModalReporte
+  open={modalAbierto}
+  onClose={() => setModalAbierto(false)}
+  onConfirm={handleReportar}
+/>
     </Card>
   );
 }

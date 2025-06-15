@@ -5,19 +5,22 @@ import { obtenerUsuarios } from '@/connect/users';
 import { Usuario } from '@/interfaces/Usuario';
 import { Categoria } from '@/interfaces/Categoria';
 import {
-  Container, Typography, Box, Paper, Button, List, ListItem, ListItemText, Stack, TextField, Drawer, ListItemButton, IconButton, AppBar, Toolbar
+  Container, Typography, Box, Paper, Button, List, ListItem, ListItemText, Stack, TextField, Drawer, ListItemButton, IconButton, AppBar, Toolbar,
+  Link
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';
 import { crearCategoria, eliminarCategoria, obtenerCategorias } from '@/connect/categorias';
 import ModalGenerico from '@/components/modal';
+import { Reporte } from '@/interfaces/reporte';
+import { obtenerReportes } from '@/connect/reporte';
 
 
 
 export default function AdminPage() {
   const [users, setUsers] = useState<Usuario[]>([]);
   const [paginaActual, setPaginaActual] = useState(1);
-  const [seccionActiva, setSeccionActiva] = useState<'usuarios' | 'categorias'>('usuarios');
+  const [seccionActiva, setSeccionActiva] = useState<'usuarios' | 'categorias' | 'reportes'>('usuarios');
   const [sidebarAbierto, setSidebarAbierto] = useState(true);
   const [nuevaCat, setNuevaCat] = useState('');
   const [open, setOpen] = useState(false);
@@ -27,52 +30,61 @@ export default function AdminPage() {
   const ITEMS_POR_PAGINA = 5;
 
   const [categories, setCategories] = useState<Categoria[]>([]);
-
+  const [reportes, setReportes] = useState<Reporte[]>([]);
 
   const manejarConfirmacion = async () => {
-  if (!categoriaSeleccionada) return;
+    if (!categoriaSeleccionada) return;
 
-  try {
-    await eliminarCategoria(categoriaSeleccionada.id);
-    setCategories((prev) =>
-      prev.filter((c) => c.id !== categoriaSeleccionada.id)
-    );
-    setCategoriaSeleccionada(null);
-    setOpen(false);
-    setErrorModal(null); 
-  } catch (error: any) {
-    const msg ='Error al eliminar la categoría. Asegurate de que no tenga ofertas asociadas.';
-    setErrorModal(msg);
-    setOpen(true)
-  }
-};
+    try {
+      await eliminarCategoria(categoriaSeleccionada.id);
+      setCategories((prev) =>
+        prev.filter((c) => c.id !== categoriaSeleccionada.id)
+      );
+      setCategoriaSeleccionada(null);
+      setOpen(false);
+      setErrorModal(null);
+    } catch (error: any) {
+      const msg = 'Error al eliminar la categoría. Asegurate de que no tenga ofertas asociadas.';
+      setErrorModal(msg);
+      setOpen(true)
+    }
+  };
 
 
 
 
   useEffect(() => {
-    const checkAuthYUsuarios = async () => {
+    const checkAuthYDatos = async () => {
       const valido = await validarToken();
       if (!valido) {
         window.location.href = '/login';
         return;
       }
-
+  
       try {
-        const datos = await obtenerUsuarios();
-        setUsers(datos);
+        const usuarios = await obtenerUsuarios();
+        setUsers(usuarios);
       } catch (error) {
         console.error('Error al obtener usuarios:', error);
       }
+  
       try {
-        const datos = await obtenerCategorias();
-        setCategories(datos);
+        const cats = await obtenerCategorias();
+        setCategories(cats);
       } catch (error) {
-        console.error('Error al obtener usuarios:', error);
+        console.error('Error al obtener categorías:', error);
+      }
+  
+      try {
+        const rep = await obtenerReportes();
+        setReportes(rep.data);
+        console.log("reportes", rep);
+      } catch (error) {
+        console.error('Error al obtener reportes:', error);
       }
     };
-
-    checkAuthYUsuarios();
+  
+    checkAuthYDatos();
   }, []);
 
   const totalPaginas = Math.ceil(users.length / ITEMS_POR_PAGINA);
@@ -119,6 +131,14 @@ export default function AdminPage() {
                 <ListItemText primary="Gestión de categorías" />
               </ListItemButton>
             </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                selected={seccionActiva === "reportes"}
+                onClick={() => setSeccionActiva("reportes")}
+              >
+                <ListItemText primary="Ofertas reportadas" />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Drawer>
       )}
@@ -153,9 +173,8 @@ export default function AdminPage() {
                     <ListItem disablePadding>
                       <ListItemText
                         primary={`${user.nombre} (${user.correo})`}
-                        secondary={`Estado: ${
-                          user.estado ? "Activo" : "Inactivo"
-                        }`}
+                        secondary={`Estado: ${user.estado ? "Activo" : "Inactivo"
+                          }`}
                       />
                     </ListItem>
                     <Stack direction="row" spacing={2} mt={1}>
@@ -244,28 +263,55 @@ export default function AdminPage() {
               </Stack>
             </Box>
           )}
+
+          {seccionActiva === "reportes" && (
+            <Box>
+              <Typography variant="h5" gutterBottom color="white">
+                Ofertas reportadas
+              </Typography>
+              {reportes.length === 0 ? (
+                <Typography color="white">No hay reportes</Typography>
+              ) : (
+                reportes.map((reporte, idx) => (
+                  <Paper key={idx} sx={{ p: 2, mb: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      Oferta: {reporte.oferta?.titulo}
+                    </Typography>
+                    <Typography variant="body2">
+                      Usuario que reportó: {reporte.usuario?.nombre} ({reporte.usuario?.correo})
+                    </Typography>
+                    <Typography variant="body2">Motivo: {reporte.motivo}</Typography>
+                    <Typography variant="caption" color="gray">
+                      Fecha: {new Date(reporte.fechaReporte).toLocaleString()}
+                    </Typography>
+                    <Link href={`/publicacion/${reporte.oferta?.id}`}><Button variant="text" color="primary">Ver oferta</Button></Link>
+                  </Paper>
+                ))
+              )}
+            </Box>
+          )}
         </Container>
       </Box>
       <ModalGenerico
-  open={open}
-  onClose={() => {
-    setOpen(false);
-    setErrorModal(null);
-    setCategoriaSeleccionada(null);
-  }}
-  titulo="Confirmar acción"
-  contenido={
-    errorModal ? (
-      <Typography color="error">{errorModal}</Typography>
-    ) : (
-      "¿Estás seguro que querés continuar?"
-    )
-  }
-  onConfirm={manejarConfirmacion}
-  textoConfirmar="Sí, seguir"
-  textoCancelar="No"
-  disableConfirm={!!errorModal}
-/>
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          setErrorModal(null);
+          setCategoriaSeleccionada(null);
+        }}
+        titulo="Confirmar acción"
+        contenido={
+          errorModal ? (
+            <Typography color="error">{errorModal}</Typography>
+          ) : (
+            "¿Estás seguro que querés continuar?"
+          )
+        }
+        onConfirm={manejarConfirmacion}
+        textoConfirmar="Sí, seguir"
+        textoCancelar="No"
+        disableConfirm={!!errorModal}
+      />
 
 
     </Box>
