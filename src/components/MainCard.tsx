@@ -19,16 +19,9 @@ import { TokenPayload } from "@/interfaces/TokenPayLoad";
 import { borrarOferta } from "@/connect/ofertas";
 import { guardarFavorito } from "@/connect/favs";
 import Image from "next/image";
+import { Oferta } from "@/interfaces/Oferta";
 
-type Oferta = {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  cambio: string;
-  imagenes: string[];
-  categoria: Categoria;
-  fechaPublicacion: string;
-};
+
 
 interface Props {
   data: Oferta;

@@ -7,7 +7,7 @@ import { obtenerCategorias } from "@/connect/categorias";
 import { Categoria } from "@/interfaces/Categoria";
 import { jwtDecode } from "jwt-decode";
 import { TokenPayload } from "@/interfaces/TokenPayLoad";
-
+import ModalGenerico from "./modal";
 
 
 
@@ -19,6 +19,8 @@ const PublicarOferta: React.FC = () => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [categoria, setCategoria] = useState(0);
   const [userId, setUserId] = useState<number | null>(null);
+  
+
   
   
 
@@ -43,9 +45,11 @@ const PublicarOferta: React.FC = () => {
         userId
       );
       console.log("Oferta creada:", data);
+      
       setTitulo("");
       setDescripcion("");
       setFiles(null);
+      window.location.href = '/';
     } catch (err) {
       console.error("Error al crear la oferta:", err);
     }
@@ -155,6 +159,7 @@ const PublicarOferta: React.FC = () => {
       <Button variant="contained" color="primary" type="submit">
         Publicar
       </Button>
+      
     </Box>
   );
 };
