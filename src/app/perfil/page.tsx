@@ -52,7 +52,7 @@ const Perfil: React.FC = () => {
 
   return (
     <div className="bg-gray-800 p-6">
-      <div className="mx-auto bg-white rounded-lg shadow-lg p-6 lg:max-w-[1000px]">
+      <div className="mx-auto bg-white rounded-lg shadow-lg p-6 lg:max-w-[1000px]" style={{ backgroundColor: "#ededed" }}>
         <div className="flex items-center mb-6">
 
           <Avatar alt="Avatar" sx={{ height: 75, width: 75 }} />
@@ -66,7 +66,7 @@ const Perfil: React.FC = () => {
           <Typography variant="h6" color="black" gutterBottom>
             Mis Publicaciones activas
           </Typography>
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" sx={{ backgroundColor: "#ededed" }}>
             <IconButton onClick={() => scroll(scrollRef1, "left")}> <ArrowBackIos /> </IconButton>
             <Box
               ref={scrollRef1}
