@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import OfferCard from './MainCard';
 import { Oferta } from '@/interfaces/Oferta';
+import { buscarOfertas } from '@/connect/ofertas';
 
 export default function BuscarResultados() {
   const searchParams = useSearchParams();
@@ -15,14 +16,16 @@ export default function BuscarResultados() {
   useEffect(() => {
     if (!categoriaId && !keywords) return;
 
-    const query = new URLSearchParams();
-    if (categoriaId) query.append('categoria_id', categoriaId);
-    if (keywords) query.append('keywords', keywords);
+    const fetchOfertas = async () => {
+      try {
+        const data = await buscarOfertas(categoriaId ?? undefined, keywords ?? undefined);
+        setOfertas(data);
+      } catch (err) {
+        console.error('Error buscando ofertas:', err);
+      }
+    };
 
-    fetch(`http://localhost:3001/ofertas/buscar?${query.toString()}`)
-      .then((res) => res.json())
-      .then((data) => setOfertas(data))
-      .catch((err) => console.error('Error buscando ofertas:', err));
+    fetchOfertas();
   }, [categoriaId, keywords]);
 
   return (

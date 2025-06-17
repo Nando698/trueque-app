@@ -14,6 +14,9 @@ import { crearCategoria, eliminarCategoria, obtenerCategorias } from '@/connect/
 import ModalGenerico from '@/components/modal';
 import { Reporte } from '@/interfaces/reporte';
 import { obtenerReportes } from '@/connect/reporte';
+import CatAdmin from '@/components/catAdmin';
+import ReportesAdmin from '@/components/reportesAdmin';
+import UsuariosAdmin from '@/components/usuariosAdmin';
 
 
 
@@ -22,12 +25,11 @@ export default function AdminPage() {
   const [paginaActual, setPaginaActual] = useState(1);
   const [seccionActiva, setSeccionActiva] = useState<'usuarios' | 'categorias' | 'reportes'>('usuarios');
   const [sidebarAbierto, setSidebarAbierto] = useState(true);
-  const [nuevaCat, setNuevaCat] = useState('');
   const [open, setOpen] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<Categoria | null>(null);
   const [errorModal, setErrorModal] = useState<string | null>(null);
 
-  const ITEMS_POR_PAGINA = 5;
+  
 
   const [categories, setCategories] = useState<Categoria[]>([]);
   const [reportes, setReportes] = useState<Reporte[]>([]);
@@ -60,21 +62,21 @@ export default function AdminPage() {
         window.location.href = '/login';
         return;
       }
-  
+
       try {
         const usuarios = await obtenerUsuarios();
         setUsers(usuarios);
       } catch (error) {
         console.error('Error al obtener usuarios:', error);
       }
-  
+
       try {
         const cats = await obtenerCategorias();
         setCategories(cats);
       } catch (error) {
         console.error('Error al obtener categorías:', error);
       }
-  
+
       try {
         const rep = await obtenerReportes();
         setReportes(rep.data);
@@ -83,15 +85,11 @@ export default function AdminPage() {
         console.error('Error al obtener reportes:', error);
       }
     };
-  
+
     checkAuthYDatos();
   }, []);
 
-  const totalPaginas = Math.ceil(users.length / ITEMS_POR_PAGINA);
-  const usuariosVisibles = users.slice(
-    (paginaActual - 1) * ITEMS_POR_PAGINA,
-    paginaActual * ITEMS_POR_PAGINA
-  );
+  
 
   return (
     <Box
@@ -162,134 +160,29 @@ export default function AdminPage() {
         </AppBar>
 
         <Container maxWidth="md" sx={{ py: 4 }}>
-          {seccionActiva === "usuarios" && (
-            <Box mb={5}>
-              <Typography variant="h5" gutterBottom color="white">
-                Usuarios
-              </Typography>
-              <List>
-                {usuariosVisibles.map((user: Usuario) => (
-                  <Paper key={user.id} sx={{ p: 2, mb: 2 }}>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary={`${user.nombre} (${user.correo})`}
-                        secondary={`Estado: ${user.estado ? "Activo" : "Inactivo"
-                          }`}
-                      />
-                    </ListItem>
-                    <Stack direction="row" spacing={2} mt={1}>
-                      <Button variant="outlined">Desactivar</Button>
-                      <Button variant="outlined" color="error">
-                        Eliminar
-                      </Button>
-                    </Stack>
-                  </Paper>
-                ))}
-              </List>
 
-              <Stack direction="row" justifyContent="center" spacing={2} mt={2}>
-                <Button
-                  variant="outlined"
-                  onClick={() => setPaginaActual((p) => Math.max(p - 1, 1))}
-                  disabled={paginaActual === 1}
-                >
-                  Anterior
-                </Button>
-                <Typography color="white" sx={{ alignSelf: "center" }}>
-                  Página {paginaActual} de {totalPaginas}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  onClick={() =>
-                    setPaginaActual((p) => Math.min(p + 1, totalPaginas))
-                  }
-                  disabled={paginaActual === totalPaginas}
-                >
-                  Siguiente
-                </Button>
-              </Stack>
-            </Box>
-          )}
+
+
+          {seccionActiva === 'usuarios' && <UsuariosAdmin usuarios={users} />}
+
 
           {seccionActiva === "categorias" && (
-            <Box>
-              <Typography variant="h5" gutterBottom color="white">
-                Categorías
-              </Typography>
-              <Stack spacing={2} mb={2}>
-                {categories.map((cat, index) => (
-                  <Paper
-                    key={index}
-                    sx={{
-                      p: 2,
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography>{cat.nombre}</Typography>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      onClick={() => {
-                        setCategoriaSeleccionada(cat);
-                        setOpen(true);
-                      }}
-                    >
-                      Eliminar
-                    </Button>
-                  </Paper>
-                ))}
-              </Stack>
-              <Stack direction="row" spacing={2}>
-                <TextField
-                  variant="outlined"
-                  label="Nueva Categoría"
-                  size="small"
-                  onChange={(e) => {
-                    setNuevaCat(e.target.value);
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    crearCategoria(nuevaCat);
-                    window.location.reload();
-                    setSeccionActiva('categorias')
-                  }}
-                >
-                  Agregar Categoría
-                </Button>
-              </Stack>
-            </Box>
+            <CatAdmin
+              categorias={categories}
+              onEliminar={(cat) => {
+                setCategoriaSeleccionada(cat);
+                setOpen(true);
+              }}
+              onCrear={async (nombre) => {
+                await crearCategoria(nombre);
+                const nuevasCats = await obtenerCategorias();
+                setCategories(nuevasCats);
+              }}
+            />
           )}
 
-          {seccionActiva === "reportes" && (
-            <Box>
-              <Typography variant="h5" gutterBottom color="white">
-                Ofertas reportadas
-              </Typography>
-              {reportes.length === 0 ? (
-                <Typography color="white">No hay reportes</Typography>
-              ) : (
-                reportes.map((reporte, idx) => (
-                  <Paper key={idx} sx={{ p: 2, mb: 2 }}>
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      Oferta: {reporte.oferta?.titulo}
-                    </Typography>
-                    <Typography variant="body2">
-                      Usuario que reportó: {reporte.usuario?.nombre} ({reporte.usuario?.correo})
-                    </Typography>
-                    <Typography variant="body2">Motivo: {reporte.motivo}</Typography>
-                    <Typography variant="caption" color="gray">
-                      Fecha: {new Date(reporte.fechaReporte).toLocaleString()}
-                    </Typography>
-                    <Link href={`/publicacion/${reporte.oferta?.id}`}><Button variant="text" color="primary">Ver oferta</Button></Link>
-                  </Paper>
-                ))
-              )}
-            </Box>
-          )}
+          {seccionActiva === "reportes" && <ReportesAdmin reportes={reportes} />}
+
         </Container>
       </Box>
       <ModalGenerico

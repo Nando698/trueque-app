@@ -69,4 +69,24 @@ export const registerFunction = async (nombre:string, correo: string, password: 
     console.log(error);
     
   }
+
+
+};
+
+
+export const solicitarCodigoRecuperacion = async (correo: string) => {
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/auth/recovery`, {
+    correo,
+  });
+  return response.data;
+};
+
+export const cambiarPassword = async (correo: string, codigo: string, nuevaPass: string) => {
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/auth/reset-password`, {
+    correo,
+    codigo,
+    nuevaPass
+  });
+
+  return response.data;
 };

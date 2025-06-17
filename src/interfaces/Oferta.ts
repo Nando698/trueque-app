@@ -1,4 +1,5 @@
 import { Categoria } from "./Categoria"
+import { Usuario } from "./Usuario"
 
 export interface Oferta {
     id: number
@@ -9,4 +10,5 @@ export interface Oferta {
     categoria: Categoria
     fechaPublicacion: string
     estado: string
+    usuario: Usuario
   }

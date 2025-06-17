@@ -1,7 +1,6 @@
 'use client';
 
 import { jwtDecode } from "jwt-decode";
-import { Categoria } from "@/interfaces/Categoria";
 import {
   Card,
   CardActions,
@@ -42,6 +41,7 @@ export default function OfferCard({ data }: Props) {
       if (token) {
         const decoded = jwtDecode<TokenPayload>(token);
         setEsAdmin(decoded.rol === "ADMIN");
+        console.log(data)
       }
     }
   }, []);

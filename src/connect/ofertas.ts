@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 export const obtenerOfertas = async () => {
-  const res = await axios.get(`http://localhost:3001/ofertas`,{
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/ofertas`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -11,20 +11,45 @@ export const obtenerOfertas = async () => {
   return res.data
 }
 
-export const obtenerOfertasPropias = async (id:number) => {
-  const res = await axios.get(`http://localhost:3001/ofertas?usuario_id=${id}`,{
+export const obtenerOfertasPropias = async (id: number, estado?: string) => {
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/ofertas`, {
+    params: {
+      usuario_id: id,
+      estado,
+    },
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
-  })
-  return res.data
-}
+  });
+
+  return response.data;
+};
+
+
+export const buscarOfertas = async (
+  categoriaId?: string,
+  keywords?: string
+) => {
+  const params = new URLSearchParams();
+  if (categoriaId) params.append('categoria_id', categoriaId);
+  if (keywords) params.append('keywords', keywords);
+
+  const token = localStorage.getItem('token');
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/ofertas/buscar?${params.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
 
 
 
 
 export const borrarOferta = async (id:number) => {
-  const res = await axios.delete(`http://localhost:3001/ofertas/${id}`,{
+  const res = await axios.delete(`${process.env.NEXT_PUBLIC_BACK_URL}/ofertas/${id}`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -35,7 +60,7 @@ export const borrarOferta = async (id:number) => {
 
 
 export const obtenerUnaOferta = async (id:number) => {
-  const res = await axios.get(`http://localhost:3001/ofertas/${id}`,{
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/ofertas/${id}`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -68,11 +93,50 @@ export const crearOferta = async (
     }
   }
 
-  const response = await axios.post('http://localhost:3001/ofertas', formData, {
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/1/ofertas`, formData, {
     headers: { 'Content-Type': 'multipart/form-data',
               'Authorization': `Bearer ${localStorage.getItem('token')}`
      },
   });
 
   return response.data;
+};
+
+export const pausarOferta = async (id: number) => {
+  const res = await axios.patch(
+    `${process.env.NEXT_PUBLIC_BACK_URL}/ofertas/${id}/pausar`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const despausarOferta = async (id: number) => {
+  const res = await axios.patch(
+    `${process.env.NEXT_PUBLIC_BACK_URL}/ofertas/${id}/despausar`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const finalizarOferta = async (id: number) => {
+  const res = await axios.patch(
+    `${process.env.NEXT_PUBLIC_BACK_URL}/ofertas/${id}/finalizar`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+  );
+  return res.data;
 };

@@ -12,6 +12,7 @@ import {
   Box,
   Typography,
   IconButton,
+  Divider,
 } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
@@ -22,20 +23,23 @@ const Perfil: React.FC = () => {
   const [ofertasPropias, setOfertasPropias] = useState<Oferta[] | null>(null);
   const [favoritos, setFavoritos] = useState<Oferta[] | null>(null);
   const [perfil, setPerfil] = useState<Usuario | null>(null);
+  const [pausadas, setPausadas] = useState<Oferta[] | null>(null);
 
   const scrollRef1 = useRef<HTMLDivElement>(null!);
   const scrollRef2 = useRef<HTMLDivElement>(null!);
+  const scrollRef3 = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
+  
     const decoded = jwtDecode<TokenPayload>(token);
     const id = decoded.sub;
     setUserId(id);
-
+  
     obtenerUsuario(id).then(setPerfil);
-    obtenerOfertasPropias(id).then(setOfertasPropias);
+    obtenerOfertasPropias(id, "ACTIVA").then(setOfertasPropias);
+    obtenerOfertasPropias(id, "PAUSADA").then(setPausadas);
     obtenerFavoritos().then(({ data }) => {
       setFavoritos(data);
     });
@@ -61,33 +65,47 @@ const Perfil: React.FC = () => {
             <p className="text-gray-600">{perfil?.correo}</p>
           </div>
         </div>
-
-        <section>
-          <Typography variant="h6" color="black" gutterBottom>
-            Mis Publicaciones activas
-          </Typography>
-          <Box display="flex" alignItems="center">
-            <IconButton onClick={() => scroll(scrollRef1, "left")}> <ArrowBackIos /> </IconButton>
-            <Box
-              ref={scrollRef1}
-              sx={{
-                display: "flex",
-                overflowX: "auto",
-                gap: 2,
-                pb: 2,
-                scrollBehavior: "smooth",
-              }}
-            >
-              {ofertasPropias?.map((oferta) => (
-                <Box key={oferta.id} sx={{ minWidth: 300, flexShrink: 0 }}>
-                  <OfferCard data={oferta} />
-                </Box>
-              ))}
-            </Box>
-            <IconButton onClick={() => scroll(scrollRef1, "right")}> <ArrowForwardIos /> </IconButton>
+       
+       
+        {ofertasPropias && ofertasPropias.length > 0 ? (
+  <section>
+    <Typography variant="h6" color="black" gutterBottom>
+      Mis Publicaciones activas
+    </Typography>
+    <Box display="flex" alignItems="center">
+      <IconButton onClick={() => scroll(scrollRef1, "left")}>
+        <ArrowBackIos />
+      </IconButton>
+      <Box
+        ref={scrollRef1}
+        sx={{
+          display: "flex",
+          overflowX: "auto",
+          gap: 2,
+          pb: 2,
+          scrollBehavior: "smooth",
+        }}
+      >
+        {ofertasPropias.map((oferta) => (
+          <Box key={oferta.id} sx={{ minWidth: 300, flexShrink: 0 }}>
+            <OfferCard data={oferta} />
           </Box>
-        </section>
+        ))}
+      </Box>
+      <IconButton onClick={() => scroll(scrollRef1, "right")}>
+        <ArrowForwardIos />
+      </IconButton>
+    </Box>
+  </section>
+) : (
+  <Typography variant="h6" color="black" gutterBottom>
+    No tenés publicaciones activas
+  </Typography>
+)}
 
+<Divider sx={{ my: 4 }} />
+
+{favoritos && favoritos.length > 0 ? (
         <section className="mt-8">
           <Typography variant="h6" color="black" gutterBottom>
             Publicaciones favoritas
@@ -113,7 +131,46 @@ const Perfil: React.FC = () => {
             <IconButton onClick={() => scroll(scrollRef2, "right")}> <ArrowForwardIos /> </IconButton>
           </Box>
         </section>
+        ) : (
+          <Typography variant="h6" color="black" gutterBottom>
+            No tenés publicaciones favoritas
+          </Typography>
+        )}
 
+<Divider sx={{ my: 4 }} />
+
+{pausadas && pausadas.length > 0 ? (
+        <section className="mt-8">
+  <Typography variant="h6" color="black" gutterBottom>
+    Publicaciones pausadas
+  </Typography>
+  <Box display="flex" alignItems="center">
+    <IconButton onClick={() => scroll(scrollRef3, "left")}> <ArrowBackIos /> </IconButton>
+    <Box
+      ref={scrollRef1}
+      sx={{
+        display: "flex",
+        overflowX: "auto",
+        gap: 2,
+        pb: 2,
+        scrollBehavior: "smooth",
+      }}
+    >
+      {pausadas?.map((oferta) => (
+        <Box key={oferta.id} sx={{ minWidth: 300, flexShrink: 0 }}>
+          <OfferCard data={oferta} />
+        </Box>
+      ))}
+    </Box>
+    <IconButton onClick={() => scroll(scrollRef1, "right")}> <ArrowForwardIos /> </IconButton>
+  </Box>
+</section>
+
+) : (
+  <Typography variant="h6" color="black" gutterBottom>
+    No tenés publicaciones pausadas
+  </Typography>
+)}
       </div>
     </div>
   );

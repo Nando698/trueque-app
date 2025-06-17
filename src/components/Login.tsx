@@ -1,5 +1,6 @@
 'use client'
 import { loguearse } from '@/connect/auth'
+import Link from 'next/link'
 import React from 'react'
 
 import { useState } from 'react'
@@ -58,6 +59,9 @@ const LoginPage: React.FC = () => {
 
         <div className="text-center mt-4 text-sm text-gray-600">
           ¿No tenés cuenta? <a href="/register" className="text-blue-600 hover:underline">Registrate</a>
+        </div>
+        <div className="text-center mt-4 text-sm text-gray-600">
+          <Link href="/recuperar" className="text-blue-600 hover:underline">Recupera tu contraseña</Link>
         </div>
       </form>
     </div>

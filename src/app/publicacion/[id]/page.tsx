@@ -8,41 +8,59 @@ import {
   ImageListItem,
   Paper,
   CircularProgress,
+  Button,
 } from '@mui/material';
 
 import Image from 'next/image';
 import { validarToken } from '@/connect/auth';
-import { obtenerUnaOferta } from '@/connect/ofertas';
+import { despausarOferta, finalizarOferta, obtenerUnaOferta, pausarOferta } from '@/connect/ofertas';
 import { useParams } from 'next/navigation';
 import { Oferta } from '@/interfaces/Oferta';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { jwtDecode } from "jwt-decode";
+import { TokenPayload } from '@/interfaces/TokenPayLoad';
 
 const OfertaDetalle = () => {
   const [oferta, setOferta] = useState<Oferta | null>(null);
   const [imagenActiva, setImagenActiva] = useState(0);
   const cambiarImagen = (i: number) => setImagenActiva(i);
+  const [esPropia, setEsPropia] = useState(false);
 
   const params = useParams();
   const id = Number(params?.id);
 
+  const estadoColor: Record<string, string> = {
+    ACTIVA: 'green',
+    PAUSADA: 'orange',
+    FINALIZADA: 'red',
+  };
+
   useEffect(() => {
-    const checkAuth = async () => {
+    const cargarDatos = async () => {
       const valido = await validarToken();
       if (!valido) {
         window.location.href = '/login';
+        return;
+      }
+
+      if (!id || isNaN(id)) return;
+
+      const token = localStorage.getItem("token");
+      const decoded = token ? jwtDecode<TokenPayload>(token) : null;
+
+      try {
+        const ofertaCargada = await obtenerUnaOferta(id);
+        setOferta(ofertaCargada);
+        if (decoded && ofertaCargada.usuario.id === decoded.sub) {
+          setEsPropia(true);
+        }
+      } catch (error) {
+        console.error('Error al obtener una oferta:', error);
       }
     };
 
-    checkAuth();
-
-    if (!id || isNaN(id)) return;
-
-    obtenerUnaOferta(id)
-      .then(setOferta)
-      .catch((error: Error) => {
-        console.error('Error al obtener una oferta:', error);
-      });
+    cargarDatos();
   }, [id]);
 
   if (!oferta) {
@@ -228,7 +246,7 @@ const OfertaDetalle = () => {
             <Box
               component="span"
               sx={{
-                color: oferta.estado === 'ACTIVO' ? 'green' : 'red',
+                color: estadoColor[oferta.estado],
                 fontWeight: 'bold',
                 ml: 1,
               }}
@@ -236,6 +254,18 @@ const OfertaDetalle = () => {
               {oferta.estado}
             </Box>
           </Typography>
+          {esPropia && (
+            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+              {oferta.estado === 'ACTIVA' && (
+                <Button onClick={() => pausarOferta(oferta.id)}>Pausar</Button>
+              )}
+              {oferta.estado === 'PAUSADA' && (
+                <Button onClick={() => despausarOferta(oferta.id)}>Despausar</Button>
+              )}
+
+              <Button onClick={() => finalizarOferta(oferta.id)}>Finalizar</Button>
+            </Box>
+          )}
         </Box>
       </Box>
     </Paper>
