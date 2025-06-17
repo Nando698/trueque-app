@@ -9,6 +9,7 @@ import {
   Paper,
   CircularProgress,
   Button,
+  Divider,
 } from '@mui/material';
 
 import Image from 'next/image';
@@ -20,12 +21,15 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { jwtDecode } from "jwt-decode";
 import { TokenPayload } from '@/interfaces/TokenPayLoad';
+import Alert from '@mui/material/Alert';
 
 const OfertaDetalle = () => {
   const [oferta, setOferta] = useState<Oferta | null>(null);
   const [imagenActiva, setImagenActiva] = useState(0);
   const cambiarImagen = (i: number) => setImagenActiva(i);
   const [esPropia, setEsPropia] = useState(false);
+  const [pausada, setPausada] = useState('');
+  const [finalizada, setFinalizada] = useState('');
 
   const params = useParams();
   const id = Number(params?.id);
@@ -61,7 +65,46 @@ const OfertaDetalle = () => {
     };
 
     cargarDatos();
-  }, [id]);
+  }, [id, oferta]);
+
+  const recargarOferta = async () => {
+    try {
+      const ofertaCargada = await obtenerUnaOferta(id);
+      setOferta(ofertaCargada);
+    } catch (error) {
+      console.error('Error al recargar la oferta:', error);
+    }
+  };
+
+
+  const handlePausar = (id:number) => {
+    pausarOferta(id)
+    setPausada('Oferta pausada')
+    recargarOferta()
+    setTimeout(() => {
+      setPausada('');
+    }, 3000);
+  }
+
+  const handleDespausar = (id:number) => {
+    despausarOferta(id)
+    setPausada('Oferta despausada')
+    recargarOferta()
+    setTimeout(() => {
+      setPausada('');
+    }, 3000);
+  }
+
+  const handleFinalizar = (id:number) => {
+    finalizarOferta(id)
+    setFinalizada('Oferta finalizada')
+    recargarOferta()
+    setTimeout(() => {
+      setFinalizada('');
+    }, 3000);
+  }
+  
+  
 
   if (!oferta) {
     return (
@@ -206,68 +249,91 @@ const OfertaDetalle = () => {
 
         {/* Detalles */}
         <Box
-          sx={{
-            flex: 1,
-            minWidth: 280,
-            bgcolor: 'white',
-            borderRadius: 2,
-            p: 3,
-            boxShadow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box>
-            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-              Descripción:
-            </Typography>
-            <Typography variant="body1" paragraph>
-              {oferta.descripcion}
-            </Typography>
+  sx={{
+    flex: 1,
+    minWidth: 280,
+    bgcolor: '#f9f9f9',
+    borderRadius: 3,
+    p: 4,
+    boxShadow: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+  }}
+>
+  <Box>
+    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+      Descripción
+    </Typography>
+    <Typography variant="body1" color="text.primary">
+      {oferta.descripcion}
+    </Typography>
+  </Box>
 
-            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-              Productos a intercambiar:
-            </Typography>
-            <Box component="ul" sx={{ pl: 3, mb: 2 }}>
-              {oferta.cambio}
-            </Box>
+  <Box>
+    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+      Productos a intercambiar
+    </Typography>
+    <Typography variant="body1" color="text.primary">
+      {oferta.cambio}
+    </Typography>
+  </Box>
 
-            <Typography variant="body2" gutterBottom>
-              <strong>Categoría:</strong> {oferta.categoria.nombre}
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              <strong>Fecha de publicación:</strong>{' '}
-              {new Date(oferta.fechaPublicacion).toLocaleDateString('es-AR')}
-            </Typography>
-          </Box>
+  <Box>
+    <Typography variant="body2" color="text.secondary">
+      <strong>Categoría:</strong> {oferta.categoria.nombre}
+    </Typography>
+    <Typography variant="body2" color="text.secondary">
+      <strong>Fecha de publicación:</strong>{' '}
+      {new Date(oferta.fechaPublicacion).toLocaleDateString('es-AR')}
+    </Typography>
+  </Box>
 
-          <Typography variant="body2" sx={{ mt: 2 }}>
-            <strong>Estado:</strong>{' '}
-            <Box
-              component="span"
-              sx={{
-                color: estadoColor[oferta.estado],
-                fontWeight: 'bold',
-                ml: 1,
-              }}
-            >
-              {oferta.estado}
-            </Box>
-          </Typography>
-          {esPropia && (
-            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-              {oferta.estado === 'ACTIVA' && (
-                <Button onClick={() => pausarOferta(oferta.id)}>Pausar</Button>
+  <Box>
+    <Typography variant="body2" color="text.secondary">
+      <strong>Estado:</strong>{' '}
+      <Box
+        component="span"
+        sx={{
+          color: estadoColor[oferta.estado],
+          fontWeight: 'bold',
+          ml: 1,
+        }}
+      >
+        {oferta.estado}
+      </Box>
+    </Typography>
+  </Box>
+
+  {esPropia && (
+    <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+      <Divider />
+      {oferta.estado === 'ACTIVA' && (
+        <Button variant="contained" color="warning" onClick={() => handlePausar(oferta.id)}>
+          Pausar
+        </Button>
+             
+      )}
+       {pausada && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  {pausada}
+                </Alert>
               )}
-              {oferta.estado === 'PAUSADA' && (
-                <Button onClick={() => despausarOferta(oferta.id)}>Despausar</Button>
-              )}
+      {oferta.estado === 'PAUSADA' && (
+        <Button variant="contained" color="success" onClick={() => handleDespausar(oferta.id)}>
+          Despausar
+        </Button>
+      )}
 
-              <Button onClick={() => finalizarOferta(oferta.id)}>Finalizar</Button>
-            </Box>
-          )}
-        </Box>
+{oferta.estado !== 'FINALIZADA' && (
+      <Button variant="contained" color="error" onClick={() => handleFinalizar(oferta.id)}>
+        Finalizar
+      </Button>
+      )}
+    </Box>
+  )}
+</Box>
+
       </Box>
     </Paper>
   );

@@ -93,7 +93,7 @@ export const crearOferta = async (
     }
   }
 
-  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/1/ofertas`, formData, {
+  const response = await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/ofertas`, formData, {
     headers: { 'Content-Type': 'multipart/form-data',
               'Authorization': `Bearer ${localStorage.getItem('token')}`
      },

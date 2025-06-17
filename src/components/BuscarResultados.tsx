@@ -30,17 +30,18 @@ export default function BuscarResultados() {
 
   return (
     <main
-      className="
-        p-4
-        grid
-        grid-cols-[repeat(auto-fill,minmax(280px,1fr))]
-        gap-6
-        justify-center
-        min-h-screen
-        bg-[#1c1f2b]
-        text-white
-      "
-    >
+  className="
+    p-4
+    grid
+    grid-cols-1
+    sm:grid-cols-2
+    md:grid-cols-4
+    gap-4
+    place-items-center
+    bg-[#1c1f2b]
+    text-white
+  "
+>
       {ofertas.length === 0 ? (
         <p>No se encontraron ofertas.</p>
       ) : (

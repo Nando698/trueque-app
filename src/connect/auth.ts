@@ -23,7 +23,10 @@ export const validarToken = async (): Promise<boolean> => {
 
 
 
-export const loguearse = async (correo: string, password: string): Promise<boolean> => {
+export const loguearse = async (
+  correo: string,
+  password: string
+): Promise<{ ok: boolean; error?: string }> => {
   try {
     const response = await axios.post('http://localhost:3001/auth/login', {
       correo,
@@ -31,17 +34,18 @@ export const loguearse = async (correo: string, password: string): Promise<boole
     });
 
     const token = response.data.access_token;
-    console.log(response)
     if (token) {
       localStorage.setItem('token', token);
-      localStorage.setItem('nombre', response.data.nombre )
-      return true;
+      localStorage.setItem('nombre', response.data.nombre);
+      return { ok: true };
     }
 
-    return false;
-  } catch (error) {
-    console.log(error);
-    return false;
+    return { ok: false, error: 'Token no recibido' };
+  } catch (error: any) {
+    // Obtené mensaje del backend o de Axios
+    const mensaje =
+      error?.response?.data?.message || 'Error al iniciar sesión';
+    return { ok: false, error: mensaje };
   }
 };
 

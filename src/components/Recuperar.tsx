@@ -14,6 +14,7 @@ const [nuevaPass, setNuevaPass] = useState('');
 
 
 
+
 const enviarSolicitud = async () => {
     try {
       const data = await solicitarCodigoRecuperacion(correo);
@@ -33,7 +34,8 @@ const enviarSolicitud = async () => {
       
       window.location.href = '/login';
     } catch (error) {
-      console.error('Error al cambiar la contraseña:', error);
+      setError('Codigo incorrecto');
+      setMensaje('');
       
     }
   };

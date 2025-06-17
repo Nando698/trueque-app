@@ -2,23 +2,30 @@
 import { loguearse } from '@/connect/auth'
 import Link from 'next/link'
 import React from 'react'
+import Alert from '@mui/material/Alert';
 
 import { useState } from 'react'
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('');
 
   const manejarSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const ok = await loguearse(email, password);
+    e.preventDefault();
+    setError('');
+  
+    const { ok, error: mensajeError } = await loguearse(email, password);
     if (ok) {
-    window.location.href = '/';
-  } 
-  }
+      window.location.href = '/';
+    } else {
+      setError(mensajeError || 'Error desconocido');
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-800">
+      
       <form onSubmit={manejarSubmit} className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-black">Iniciar sesión</h2>
 
@@ -63,6 +70,11 @@ const LoginPage: React.FC = () => {
         <div className="text-center mt-4 text-sm text-gray-600">
           <Link href="/recuperar" className="text-blue-600 hover:underline">Recupera tu contraseña</Link>
         </div>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
       </form>
     </div>
   )

@@ -11,6 +11,7 @@ import {
   IconButton,
   MobileStepper,
   Link,
+  Alert,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
@@ -33,6 +34,7 @@ export default function OfferCard({ data }: Props) {
   const maxSteps = imagenes.length;
   const [activeStep, setActiveStep] = useState(0);
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [agregadoFav, setAgregadoFav] = useState('');
 
 
   useEffect(() => {
@@ -60,16 +62,24 @@ export default function OfferCard({ data }: Props) {
       await reportarOferta(data.id, motivo);
     } catch (e) {
       console.error('Error al reportar:', e);
-      alert('No se pudo enviar el reporte');
+      
     } finally {
       setModalAbierto(false);
     }
   };
 
+
+  const handleFav = (id:number) => {
+    guardarFavorito(id)
+    setAgregadoFav('Oferta guardada!')
+    setTimeout(() => {
+      setAgregadoFav('');
+    }, 3000);
+  }
+
   return (
     <Card
       sx={{
-        maxWidth: 400,
         height: 400,
         display: "flex",
         flexDirection: "column",
@@ -78,7 +88,12 @@ export default function OfferCard({ data }: Props) {
       }}
     >
       {/* Slider de imágenes */}
-      <Box position="relative" width="100%" height={180} bgcolor="#fff">
+      <Box
+  position="relative"
+  width="100%"
+  height={{ xs: 290, sm: 270, md: 190 }}
+  bgcolor="#fff"
+>
         {imagenes.length > 0 ? (
           <>
             <Box
@@ -191,11 +206,28 @@ export default function OfferCard({ data }: Props) {
         </Typography>
       </CardContent>
 
-      <CardActions sx={{ justifyContent: "center", mt: "auto", mb: 2 }}>
+      <CardActions
+  sx={{
+    display: 'flex',
+    flexDirection: { xs: 'column', md: 'row' }, // se apilan hasta md
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+    gap: 1,
+    mt: 'auto',
+    px: 1,
+    '& > button': {
+  flex: 1,
+  fontSize: '0.85rem',
+  padding: '6px 8px',
+  width: { xs: '100%', md: 'auto' },
+  maxWidth: { xs: '100%', md: 'unset' },
+},
+  }}
+>
         <Button size="small" component={Link} href={`/publicacion/${data.id}`}>
           Ver más
         </Button>
-        <Button size="small" onClick={() => guardarFavorito(data.id)}>
+        <Button size="small" onClick={() => handleFav(data.id)}>
           Guardar
         </Button>
         {esAdmin && (
@@ -218,6 +250,11 @@ export default function OfferCard({ data }: Props) {
   onClose={() => setModalAbierto(false)}
   onConfirm={handleReportar}
 />
+{agregadoFav && (
+                <Alert severity="success" sx={{ mb: 2 }}>
+                  {agregadoFav}
+                </Alert>
+              )}
     </Card>
   );
 }
