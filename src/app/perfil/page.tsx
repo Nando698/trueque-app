@@ -56,7 +56,7 @@ const Perfil: React.FC = () => {
 
   return (
     <div className="bg-gray-800 p-6">
-      <div className="mx-auto bg-white rounded-lg shadow-lg p-6 lg:max-w-[1000px]">
+      <div className="mx-auto bg-white rounded-lg shadow-lg p-6 lg:max-w-[1000px]" style={{ backgroundColor: "#ededed" }}>
         <div className="flex items-center mb-6">
 
           <Avatar alt="Avatar" sx={{ height: 75, width: 75 }} />
@@ -65,6 +65,7 @@ const Perfil: React.FC = () => {
             <p className="text-gray-600">{perfil?.correo}</p>
           </div>
         </div>
+
        
        
         {ofertasPropias && ofertasPropias.length > 0 ? (
@@ -72,7 +73,7 @@ const Perfil: React.FC = () => {
     <Typography variant="h6" color="black" gutterBottom>
       Mis Publicaciones activas
     </Typography>
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" sx={{ backgroundColor: "#ededed" }}>
       <IconButton onClick={() => scroll(scrollRef1, "left")}>
         <ArrowBackIos />
       </IconButton>
@@ -89,6 +90,7 @@ const Perfil: React.FC = () => {
         {ofertasPropias.map((oferta) => (
           <Box key={oferta.id} sx={{ minWidth: 300, flexShrink: 0 }}>
             <OfferCard data={oferta} />
+
           </Box>
         ))}
       </Box>

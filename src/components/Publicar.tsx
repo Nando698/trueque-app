@@ -7,6 +7,8 @@ import {
   Box,
   Select,
   MenuItem,
+  Paper,
+  IconButton,
 } from "@mui/material";
 import { crearOferta } from "@/connect/ofertas";
 import { useEffect, useState } from "react";
@@ -14,7 +16,7 @@ import { obtenerCategorias } from "@/connect/categorias";
 import { Categoria } from "@/interfaces/Categoria";
 import { jwtDecode } from "jwt-decode";
 import { TokenPayload } from "@/interfaces/TokenPayLoad";
-import ModalGenerico from "./modal";
+import { Close } from "@mui/icons-material";
 
 const PublicarOferta: React.FC = () => {
   const [titulo, setTitulo] = useState("");
@@ -44,7 +46,6 @@ const PublicarOferta: React.FC = () => {
         userId
       );
       console.log("Oferta creada:", data);
-
       setTitulo("");
       setDescripcion("");
       setFiles(null);
@@ -57,6 +58,19 @@ const PublicarOferta: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFiles(e.target.files);
   };
+
+const removeImage = (indexToRemove: number) => {
+  if (!files) return;
+
+  const dt = new DataTransfer();
+  Array.from(files).forEach((file, index) => {
+    if (index !== indexToRemove) {
+      dt.items.add(file);
+    }
+  });
+
+  setFiles(dt.files);
+};
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -75,20 +89,22 @@ const PublicarOferta: React.FC = () => {
         console.error("Error al obtener categorias desde publicar.tsx", err);
       }
     };
-
     fetchData();
   }, []);
 
   return (
+  <Box display="flex" height="100vh" p={2} sx={{ backgroundColor: "white" }}>
+    {/* Sección de formulario */}
     <Box
       component="form"
       onSubmit={handleSubmit}
       sx={{
+        flex: 2,
         display: "flex",
         flexDirection: "column",
         gap: 2,
-        maxWidth: 600,
-        p: 2,
+        pr: 2,
+        overflowY: "auto",
       }}
     >
       <Typography variant="h5" sx={{ color: "black" }}>
@@ -115,18 +131,14 @@ const PublicarOferta: React.FC = () => {
 
       <Select
         labelId="categorias"
-        id="demo-simple-select"
         value={categoria}
-        label="Categoria"
         onChange={(e) => setCategoria(e.target.value)}
       >
-        {categorias.map((categoria) => {
-          return (
-            <MenuItem key={categoria.id} value={categoria.id}>
-              {categoria.nombre}
-            </MenuItem>
-          );
-        })}
+        {categorias.map((categoria) => (
+          <MenuItem key={categoria.id} value={categoria.id}>
+            {categoria.nombre}
+          </MenuItem>
+        ))}
       </Select>
 
       <Button variant="outlined" component="label">
@@ -140,15 +152,15 @@ const PublicarOferta: React.FC = () => {
         />
       </Button>
 
-      {/* Lógica para ver cantidad de imágenes que selecciono*/}
+      {/* Contador de imagenes seleccionadas */}
 
       {files && files.length > 0 && (
         <Typography variant="body2" color="textSecondary">
           {files.length} imagen{files.length > 1 ? "es" : ""} seleccionada
-          {files.length > 1 ? "s" : ""}
-          (máximo 3)
+          {files.length > 1 ? "s" : ""} (máximo 3)
         </Typography>
       )}
+
       <TextField
         label="¿Qué te gustaría recibir a cambio?"
         multiline
@@ -162,7 +174,71 @@ const PublicarOferta: React.FC = () => {
         Publicar
       </Button>
     </Box>
-  );
-};
+
+    {/* Sección de Vista Previa de imagenes */}
+    <Box
+      sx={{
+        flex: 1,
+        maxHeight: "100%",
+        overflowY: "auto",
+        borderLeft: "1px solid #ddd",
+        pl: 2,
+      }}
+    >
+      <Typography variant="h6" sx={{ mb: 1, color: "black" }}>
+        Vista previa de imagenes
+      </Typography>
+
+      {files && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          {Array.from(files).map((file, index) => (
+            <Box
+              key={index}
+              sx={{
+                position: "relative",
+                width: "100%",
+                height: 150,
+              }}
+            >
+              <IconButton
+                size="small"
+                onClick={() => removeImage(index)}
+                sx={{
+                  position: "absolute",
+                  top: 4,
+                  right: 4,
+                  zIndex: 1,
+                  backgroundColor: "white",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <Close fontSize="small" />
+              </IconButton>
+              <img
+                src={URL.createObjectURL(file)}
+                alt={`preview-${index}`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  borderRadius: 4,
+                }}
+              />
+            </Box>
+          ))}
+        </Box>
+      )}
+    </Box>
+  </Box>
+);
+
+}
 
 export default PublicarOferta;
+

@@ -80,14 +80,15 @@ const OfertaDetalle = () => {
 
   return (
     <Paper
-      elevation={3}
+      elevation={6}
       sx={{
-        maxWidth: 800,
-        margin: 'auto',
-        padding: 3,
-        bgcolor: '#fafafa',
-        borderRadius: 2,
-      }}
+    maxWidth: 960,
+    margin: 'auto',
+    padding: { xs: 2, md: 4 },
+    bgcolor: 'background.paper',
+    borderRadius: 4,
+    boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
+  }}
     >
       <Typography
         variant="h4"
