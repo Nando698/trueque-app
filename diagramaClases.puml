@@ -1,0 +1,148 @@
+@startuml diagramaClases
+
+Interface Usuario{
+    +id: number
+    +nombre: string
+    +correo: string
+    +password: string
+    +rol: "ADMIN" | "REGULAR"
+    +estado: "ACTIVO" | "INACTIVO"
+    +fecha_creacion: string
+}
+
+Interface Oferta{
+    +id: number
+    +titulo: string
+    +descripcion: string
+    +cambio: string
+    +imagenes: string[]
+    +categoria: Categoria
+    +fechaPublicacion: string
+    +estado: string
+    +usuario: Usuario
+}
+
+Interface Categoria{
+    +id: number
+    +nombre: string
+}
+
+Interface Etiqueta{
+    +id: number
+    +nombre: string
+}
+
+interface Reporte{
+    +id: number;
+    +usuario: Usuario;
+    +oferta: Oferta;
+    +motivo: string;
+    +fechaReporte: string;
+}
+
+interface TokenPayload{
+    +sub: number;
+    +email: string;
+    +rol: string;
+}
+
+class AdminPage {
+    - users: Usuario[]
+    - categories: Categoria[]
+    - reportes: Reporte[]
+    - categoriaSeleccionada: Categoria | null
+    + manejarConfirmacion(): void
+}
+
+class LoginPage {
+    - email: string
+    - password: string
+    + manejarSubmit(): void
+}
+
+class BuscarResultados{
+    - ofertas: Oferta[]
+}
+
+class Perfil{
+    - userId: number | null
+    - ofertasPropias: Oferta[] | null
+    - favoritos: Oferta[] | null
+    - perfil: Usuario | null
+    - pausadas: Oferta[] | null
+}
+
+class OfertaDetalle {
+    - oferta: Oferta | null
+    - imagenActiva: number
+    - esPropia: boolean
+    + cambiarImagen(i: number): void
+}
+
+class PublicarOferta {
+    - titulo: string
+    - descripcion: string
+    - cambio: string
+    - files: FileList
+    - categorias: Categoria[]
+    - categoria: number
+    - userId: number
+    + handleSubmit(e: FormEvent): void
+    + handleFileChange(e: ChangeEvent): void
+    + removeImage(index: number): void
+}
+
+class Recuperar{
+    - correo: string
+    - mensaje: string
+    - error: string
+    - codigo: string
+    - nuevaPass: string
+
+    + enviarSolicitud(): void
+    + handleSubmit(e: FormEvent): void
+}
+
+class Register{
+    - name: string
+    - email: string
+    - password: string
+
+    + manejarSubmit(e: FormEvent): void
+}
+
+' RELACIONES
+
+' adminPage
+
+AdminPage "1" *-- "*" Usuario
+AdminPage "1" *-- "*" Categoria
+AdminPage "1" *-- "*" Reporte
+
+Reporte "1" --> "1" Usuario
+Reporte "1" --> "1" Oferta
+
+Oferta "1" --> "1" Categoria
+Oferta "1" --> "1" Usuario
+
+' BuscarResultados
+
+BuscarResultados "1" *-- "*" Oferta
+
+' Perfil
+
+Perfil "1" *-- "1" Usuario
+Perfil "1" *-- "*" Oferta
+
+' OfertaDetalle
+OfertaDetalle "1" *-- "1" Oferta
+
+' PublicarOferta
+PublicarOferta "1" *-- "*" Categoria
+
+'''''''''''''''''
+'loginPage
+'Recuperar
+'Register
+
+@enduml
