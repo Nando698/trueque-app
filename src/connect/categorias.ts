@@ -10,7 +10,11 @@ export const obtenerCategorias = async () => {
 };
 
 export const eliminarCategoria = async (id: number) => {
+  try{
   return axios.delete(`http://localhost:3001/categorias/${id}`);
+}catch(error){
+  return error
+}
 };
 
 export const crearCategoria = async (nombre: string) => {
