@@ -58,3 +58,12 @@ export const eliminarUsuario = async (id:number) => {
   )
   return res.data
 }
+
+export const obtenerUsuariosPaginado = async (page = 1, limit = 5) => {
+  const res = await axios.get(`http://localhost:3001/usuarios/paginado?page=${page}&limit=${limit}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  return res.data;
+};

@@ -1,12 +1,14 @@
 'use client';
 
 import { validarToken } from '@/connect/auth';
-import { obtenerUsuarios } from '@/connect/users';
+import { obtenerUsuariosPaginado } from '@/connect/users';
 import { Usuario } from '@/interfaces/Usuario';
 import { Categoria } from '@/interfaces/Categoria';
 import {
-  Container, Typography, Box, Paper, Button, List, ListItem, ListItemText, Stack, TextField, Drawer, ListItemButton, IconButton, AppBar, Toolbar,
-  Link
+  Container, Typography, Box, List, ListItem, ListItemText,  Drawer, ListItemButton, IconButton, AppBar, Toolbar,
+  Link,
+  Alert,
+  Snackbar
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from 'react';
@@ -28,8 +30,8 @@ export default function AdminPage() {
   const [open, setOpen] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<Categoria | null>(null);
   const [errorModal, setErrorModal] = useState<string | null>(null);
-
-  
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const itemsPorPagina = 5;
 
   const [categories, setCategories] = useState<Categoria[]>([]);
   const [reportes, setReportes] = useState<Reporte[]>([]);
@@ -64,13 +66,6 @@ export default function AdminPage() {
       }
 
       try {
-        const usuarios = await obtenerUsuarios();
-        setUsers(usuarios);
-      } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-      }
-
-      try {
         const cats = await obtenerCategorias();
         setCategories(cats);
       } catch (error) {
@@ -80,7 +75,6 @@ export default function AdminPage() {
       try {
         const rep = await obtenerReportes();
         setReportes(rep.data);
-        console.log("reportes", rep);
       } catch (error) {
         console.error('Error al obtener reportes:', error);
       }
@@ -89,7 +83,36 @@ export default function AdminPage() {
     checkAuthYDatos();
   }, []);
 
-  
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      try {
+        const res = await obtenerUsuariosPaginado(paginaActual, itemsPorPagina);
+        setUsers(res.data);
+        setTotalPaginas(Math.ceil(res.total / itemsPorPagina));
+      } catch (error:any) {
+        
+        mostrarSnackbar(`Error al obtener usuarios, codigo: ${error.response.status}`);
+      }
+    };
+
+    fetchUsuarios();
+  }, [paginaActual]);
+
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMsg, setSnackbarMsg] = useState('');
+
+
+  const mostrarSnackbar = (mensaje: string) => {
+      setSnackbarMsg(mensaje);
+      setSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = () => {
+      setSnackbarOpen(false);
+  };
+
+
 
   return (
     <Box
@@ -163,7 +186,14 @@ export default function AdminPage() {
 
 
 
-          {seccionActiva === 'usuarios' && <UsuariosAdmin usuarios={users} />}
+          {seccionActiva === 'usuarios' && (
+            <UsuariosAdmin
+              usuarios={users}
+              paginaActual={paginaActual}
+              totalPaginas={totalPaginas}
+              setPaginaActual={setPaginaActual}
+            />
+          )}
 
 
           {seccionActiva === "categorias" && (
@@ -206,7 +236,16 @@ export default function AdminPage() {
         disableConfirm={!!errorModal}
       />
 
-
+<Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    {snackbarMsg}
+                </Alert>
+            </Snackbar>
     </Box>
   );
 

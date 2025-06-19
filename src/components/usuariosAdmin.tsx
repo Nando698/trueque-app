@@ -22,17 +22,20 @@ import { useState } from 'react';
 
 interface Props {
     usuarios: Usuario[];
-    itemsPorPagina?: number;
+    paginaActual: number;
+    totalPaginas: number;
+    setPaginaActual: (pagina: number) => void;
 }
 
-export default function UsuariosAdmin({ usuarios }: Props) {
-    const [paginaActual, setPaginaActual] = useState(1);
-    const itemsPorPagina = 5;
-    const totalPaginas = Math.ceil(usuarios.length / itemsPorPagina);
-    const usuariosVisibles = usuarios.slice(
-        (paginaActual - 1) * itemsPorPagina,
-        paginaActual * itemsPorPagina
-    );
+export default function UsuariosAdmin({
+    usuarios,
+    paginaActual,
+    totalPaginas,
+    setPaginaActual,
+}: Props) {
+
+
+
 
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState('');
@@ -53,7 +56,7 @@ export default function UsuariosAdmin({ usuarios }: Props) {
                 Usuarios
             </Typography>
             <List>
-                {usuariosVisibles.map((user) => (
+                {usuarios?.map((user) => (
                     <Paper key={user.id} sx={{ p: 2, mb: 2 }}>
                         <ListItem disablePadding>
                             <ListItemText
@@ -107,17 +110,19 @@ export default function UsuariosAdmin({ usuarios }: Props) {
             <Stack direction="row" justifyContent="center" spacing={2} mt={2}>
                 <Button
                     variant="outlined"
-                    onClick={() => setPaginaActual((p) => Math.max(p - 1, 1))}
+                    onClick={() => setPaginaActual(Math.max(paginaActual - 1, 1))}
                     disabled={paginaActual === 1}
                 >
                     Anterior
                 </Button>
+
                 <Typography color="white" sx={{ alignSelf: 'center' }}>
                     Página {paginaActual} de {totalPaginas}
                 </Typography>
+
                 <Button
                     variant="outlined"
-                    onClick={() => setPaginaActual((p) => Math.min(p + 1, totalPaginas))}
+                    onClick={() => setPaginaActual(Math.min(paginaActual + 1, totalPaginas))}
                     disabled={paginaActual === totalPaginas}
                 >
                     Siguiente

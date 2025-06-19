@@ -49,6 +49,7 @@ export default function CatAdmin({ categorias, onEliminar, onCrear }: Props) {
           size="small"
           value={nuevaCat}
           onChange={(e) => setNuevaCat(e.target.value)}
+          sx={{ bgcolor: 'white' }}
         />
         <Button
           variant="contained"
