@@ -18,7 +18,7 @@ import { Reporte } from '@/interfaces/reporte';
 import { obtenerReportes } from '@/connect/reporte';
 import CatAdmin from '@/components/catAdmin';
 import ReportesAdmin from '@/components/reportesAdmin';
-import UsuariosAdmin from '@/components/usuariosAdmin';
+import AdminUsuariosContainer from '@/containers/AdminUsuariosContainer';
 
 
 
@@ -30,8 +30,7 @@ export default function AdminPage() {
   const [open, setOpen] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<Categoria | null>(null);
   const [errorModal, setErrorModal] = useState<string | null>(null);
-  const [totalPaginas, setTotalPaginas] = useState(1);
-  const itemsPorPagina = 5;
+  
 
   const [categories, setCategories] = useState<Categoria[]>([]);
   const [reportes, setReportes] = useState<Reporte[]>([]);
@@ -83,20 +82,7 @@ export default function AdminPage() {
     checkAuthYDatos();
   }, []);
 
-  useEffect(() => {
-    const fetchUsuarios = async () => {
-      try {
-        const res = await obtenerUsuariosPaginado(paginaActual, itemsPorPagina);
-        setUsers(res.data);
-        setTotalPaginas(Math.ceil(res.total / itemsPorPagina));
-      } catch (error:any) {
-        
-        mostrarSnackbar(`Error al obtener usuarios, codigo: ${error.response.status}`);
-      }
-    };
-
-    fetchUsuarios();
-  }, [paginaActual]);
+  
 
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -186,14 +172,8 @@ export default function AdminPage() {
 
 
 
-          {seccionActiva === 'usuarios' && (
-            <UsuariosAdmin
-              usuarios={users}
-              paginaActual={paginaActual}
-              totalPaginas={totalPaginas}
-              setPaginaActual={setPaginaActual}
-            />
-          )}
+        {seccionActiva === 'usuarios' && <AdminUsuariosContainer onError={mostrarSnackbar} />}
+          
 
 
           {seccionActiva === "categorias" && (

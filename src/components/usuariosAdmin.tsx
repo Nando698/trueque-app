@@ -1,7 +1,7 @@
 'use client';
 
 import { activarUsuario, desactivarUsuario, eliminarUsuario } from '@/connect/users';
-import { Usuario } from '@/interfaces/Usuario';
+import { Props } from '@/interfaces/Props';
 import {
     Box,
     Button,
@@ -20,12 +20,7 @@ import { useState } from 'react';
 
 
 
-interface Props {
-    usuarios: Usuario[];
-    paginaActual: number;
-    totalPaginas: number;
-    setPaginaActual: (pagina: number) => void;
-}
+
 
 export default function UsuariosAdmin({
     usuarios,
@@ -50,6 +45,9 @@ export default function UsuariosAdmin({
         setSnackbarOpen(false);
     };
 
+    
+    
+    
     return (
         <Box mb={5}>
             <Typography variant="h5" gutterBottom color="white">
