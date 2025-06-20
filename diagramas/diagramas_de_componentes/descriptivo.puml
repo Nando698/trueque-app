@@ -1,0 +1,221 @@
+@startuml diagramaDescriptivo
+
+note as N1
+  Este diagrama muestra las funciones de los componentes
+end note
+
+top to bottom direction
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+package FrontEnd {
+
+  package PagesLayer {
+    package app {
+      [admin]
+      note top of [admin]
+        Página del administrador donde se gestionan
+        usuarios, reportes y categorías
+      end note
+
+      [contacto]
+      note top of [contacto]
+        Página de contacto con formulario para enviar mensajes
+      end note
+
+      [faq]
+      note top of [faq]
+        Página con preguntas frecuentes sobre el uso del sitio
+      end note
+
+      [login]
+      note top of [login]
+        Página de inicio de sesión para usuarios registrados
+      end note
+
+      [ofertas]
+      note top of [ofertas]
+        Página donde figuran las ofertas filtradas según categorias o palabras clave
+      end note
+
+      [perfil]
+      note top of [perfil]
+        Página de perfil de usuario donde se ven sus
+        publicaciones y favoritos
+      end note
+
+      [publicacion]
+      note top of [publicacion]
+        Muestra los detalles completos de una oferta individual
+      end note
+
+      [publicar]
+      note top of [publicar]
+        Página con formulario para publicar una nueva oferta
+      end note
+
+      [recuperar]
+      note top of [recuperar]
+        Permite al usuario recuperar su contraseña
+      end note
+
+      [register] as appRegister
+      note top of appRegister
+        Formulario para crear una nueva cuenta de usuario
+      end note
+
+      [main]
+      note top of [main]
+        Página principal del sitio con la totalidad de las ofertas
+      end note
+    }
+  }
+
+  package UILayer {
+    package components {
+
+      [BuscarResultados]
+      note top of [BuscarResultados]
+        Busca los resultados basandose en las categorías o palabras clave y
+        los renderiza
+      end note
+
+      [catAdmin]
+      note top of [catAdmin]
+        Componente visual para visualizar,agregar o eliminar
+        categorías desde la vista admin
+      end note
+
+      [FAQContent]
+      note top of [FAQContent]
+        Bloques expandibles con las preguntas frecuentes
+      end note
+
+      [Footer]
+      note top of [Footer]
+        Pie de página con enlaces generales y créditos
+      end note
+
+      [Header]
+      note top of [Header]
+        Barra superior del sitio con navegación y buscador
+      end note
+
+      [Login]
+      note top of [Login]
+        Formulario de inicio de sesión para usuarios registrados
+      end note
+
+      [Main]
+      note top of [Main]
+        Componente principal que permite visualizar las ofertas
+      end note
+
+      [MainCard]
+      note top of [MainCard]
+        Tarjeta visual que muestra título, imagenes, descripción corta, categoría y fecha de publicación
+      end note
+
+      [Menu]
+      note top of [Menu]
+        Menú lateral desplegable con opciones de navegación
+      end note
+
+      [MiniCard]
+      note top of [MiniCard]
+        Tarjeta pequeña y compacta que muestra información básica de una oferta
+      end note
+
+      [modal]
+      note top of [modal]
+        Ventana modal reutilizable para confirmaciones
+      end note
+
+      [modalReporte]
+      note top of [modalReporte]
+        Modal personalizado para reportar una oferta
+      end note
+
+      [OfrecerModal]
+      note top of [OfrecerModal]
+        Modal personalizado para que el usuario proponga un intercambio
+      end note
+
+      [OfrecimientosRecibidos]
+      note top of [OfrecimientosRecibidos]
+        Componente que muestra los ofrecimientos recibidos
+      end note 
+
+      [Publicar]
+      note top of [Publicar]
+        Componente de formulario para publicar una nueva oferta
+      end note
+
+      [Recuperar]
+      note top of [Recuperar]
+        Formulario para escribir el código de recuperación y
+        definir una nueva contraseña
+      end note
+
+      [Register]
+      note top of [Register]
+        Componente de formulario para registrar un usuario
+      end note
+
+      [reportesAdmin]
+      note top of [reportesAdmin]
+        Tabla de reportes recibidos accesible para el admin
+      end note
+
+      [SelectTag]
+      note top of [SelectTag]
+        Selector con múltiples categorías/tags filtrables
+      end note
+
+      [usuariosAdmin]
+      note top of [usuariosAdmin]
+        Lista de usuarios administrables por el rol admin
+      end note
+    }
+
+    package containers{
+            [AdminCategoriasContainer]
+            [AdminReportesContainer]
+            [AdminUsuariosContainer]
+            [PerfilOfrecimientosRecibidosContainer]
+        }
+
+        package hooks{
+            [useAuth]
+            [useCategorias]
+            [useReportes]
+            [useUsuarios]
+        }
+
+  }
+
+  package DataAccessLayer {
+    package connect {
+      [auth]
+      [categorias]
+      [favs]
+      [ofertas] as connectOfertas
+      [ofrecimiento]
+      [reporte]
+      [users]
+    }
+  }
+
+  package interfaces {
+    [Categoria]
+    [Oferta]
+    [Ofrecimiento]
+    [Props]
+    [reporte]
+    [TokenPayLoad]
+    [Usuario]
+  }
+}
+
+
+@enduml
