@@ -14,7 +14,7 @@ import {
 
 import Image from 'next/image';
 import { obtenerIdActual, validarToken } from '@/connect/auth';
-import { despausarOferta, finalizarOferta, obtenerUnaOferta, pausarOferta } from '@/connect/ofertas';
+import { borrarOferta, despausarOferta, finalizarOferta, obtenerUnaOferta, pausarOferta } from '@/connect/ofertas';
 import { useParams } from 'next/navigation';
 import { Oferta } from '@/interfaces/Oferta';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -35,6 +35,7 @@ const OfertaDetalle = () => {
   const [pausada, setPausada] = useState('');
   const [finalizada, setFinalizada] = useState('');
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [esAdmin, setEsADmin] = useState(false);
 
 
   const params = useParams();
@@ -57,8 +58,11 @@ const OfertaDetalle = () => {
       if (!id || isNaN(id)) return;
 
       const token = localStorage.getItem("token");
-      const decoded = token ? jwtDecode<TokenPayload>(token) : null;
 
+      
+      const decoded = token ? jwtDecode<TokenPayload>(token) : null;
+      setEsADmin(decoded?.rol === "ADMIN");
+    
       try {
         const ofertaCargada = await obtenerUnaOferta(id);
         setOferta(ofertaCargada);
@@ -72,6 +76,14 @@ const OfertaDetalle = () => {
 
     cargarDatos();
   }, [id]);
+
+  const handleEliminar = async (id: number) => {
+    try {
+      await borrarOferta(id);
+     
+    } catch (e) {
+      console.error(e);
+    } }
 
   const recargarOferta = async () => {
     try {
@@ -367,6 +379,12 @@ const OfertaDetalle = () => {
               </Button>
             </Box>
           )}
+          {esAdmin && (
+            
+              <Button color="error" size="small" onClick={() => handleEliminar(oferta.id)}>
+                Eliminar
+              </Button>
+            )}
 
 
 
