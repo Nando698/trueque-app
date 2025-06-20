@@ -12,7 +12,7 @@ export function useReportes(onError?: (msg: string) => void) {
         const res = await obtenerReportes();
         setReportes(res.data);
       } catch (error) {
-        console.error('Error al obtener reportes:', error);
+        
         if (onError) onError('Error al obtener reportes');
       } finally {
         setCargando(false);

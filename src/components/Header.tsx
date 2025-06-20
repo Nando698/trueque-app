@@ -10,7 +10,7 @@ import { usePathname, useRouter } from 'next/navigation';
 const Header: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const showSearch = pathname !== '/login' && pathname !== '/register';
+  const showSearch = pathname !== '/login' && pathname !== '/register' && pathname !== '/recuperar';
 
   const [keywords, setKeywords] = useState('');
   const [categorias, setCategorias] = useState<string[]>([]); 

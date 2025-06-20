@@ -5,7 +5,7 @@ const manejarSubmit = async (e: React.FormEvent, name:string, email:string, pass
 
   try {
     console.log("Enviando datos:", { name, email, password });
-    const response = await axios.post("http://localhost:3001/usuarios", {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios`, {
       nombre: name,
       correo: email,
       password: password,

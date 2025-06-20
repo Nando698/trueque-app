@@ -39,7 +39,7 @@ const Main: React.FC = () => {
           <p className="text-white">No hay ofertas activas disponibles.</p>
         ) : (
           ofertas.map((oferta) => (
-            <OfferCard key={oferta.id} data={oferta} />
+            <OfferCard key={oferta.id} data={oferta} actions={true} />
           ))
         )}
       </div>

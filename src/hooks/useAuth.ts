@@ -1,4 +1,4 @@
-// hooks/useAuthRedirect.ts
+
 import { useEffect } from 'react';
 import { validarToken } from '@/connect/auth';
 

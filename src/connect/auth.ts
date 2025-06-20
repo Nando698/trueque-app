@@ -1,4 +1,6 @@
+import { TokenPayload } from "@/interfaces/TokenPayLoad";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 
 
@@ -8,7 +10,7 @@ export const validarToken = async (): Promise<boolean> => {
   if (!token) return false;
 
   try {
-    const res = await axios.get('http://localhost:3001/auth/validate', {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/auth/validate`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,7 +30,7 @@ export const loguearse = async (
   password: string
 ): Promise<{ ok: boolean; error?: string }> => {
   try {
-    const response = await axios.post('http://localhost:3001/auth/login', {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/auth/login`, {
       correo,
       password,
     });
@@ -60,7 +62,7 @@ export const loguearse = async (
 
 export const registerFunction = async (nombre:string, correo: string, password: string): Promise<void> => {
   try {
-     await axios.post('http://localhost:3001/usuarios', {
+     await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios`, {
       nombre,
         correo,
       password,
@@ -94,3 +96,15 @@ export const cambiarPassword = async (correo: string, codigo: string, nuevaPass:
 
   return response.data;
 };
+
+export const obtenerIdActual =  () => {
+  const token = localStorage.getItem('token')
+
+  if(token){
+    const decoded = token ? jwtDecode<TokenPayload>(token) : null;
+    return decoded?.sub;
+  }else{
+    return false
+  }
+
+}

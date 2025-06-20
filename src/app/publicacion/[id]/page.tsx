@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 import Image from 'next/image';
-import { validarToken } from '@/connect/auth';
+import { obtenerIdActual, validarToken } from '@/connect/auth';
 import { despausarOferta, finalizarOferta, obtenerUnaOferta, pausarOferta } from '@/connect/ofertas';
 import { useParams } from 'next/navigation';
 import { Oferta } from '@/interfaces/Oferta';
@@ -22,6 +22,10 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { jwtDecode } from "jwt-decode";
 import { TokenPayload } from '@/interfaces/TokenPayLoad';
 import Alert from '@mui/material/Alert';
+import { OfrecerModal } from '@/components/OfrecerModal';
+import { crearOfrecimiento } from '@/connect/ofrecimientos';
+
+
 
 const OfertaDetalle = () => {
   const [oferta, setOferta] = useState<Oferta | null>(null);
@@ -30,6 +34,8 @@ const OfertaDetalle = () => {
   const [esPropia, setEsPropia] = useState(false);
   const [pausada, setPausada] = useState('');
   const [finalizada, setFinalizada] = useState('');
+  const [mostrarModal, setMostrarModal] = useState(false);
+
 
   const params = useParams();
   const id = Number(params?.id);
@@ -65,7 +71,7 @@ const OfertaDetalle = () => {
     };
 
     cargarDatos();
-  }, [id, oferta]);
+  }, [id]);
 
   const recargarOferta = async () => {
     try {
@@ -77,7 +83,19 @@ const OfertaDetalle = () => {
   };
 
 
-  const handlePausar = (id:number) => {
+  const handleOfrecer = async (id: number, msj: string) => {
+    if (oferta) {
+      crearOfrecimiento(id, msj)
+        .then(() => {
+          setMostrarModal(false);
+          })
+        .catch((err) => console.error('Error al crear ofrecimiento:', err));
+    }
+    
+  }
+
+
+  const handlePausar = (id: number) => {
     pausarOferta(id)
     setPausada('Oferta pausada')
     recargarOferta()
@@ -86,7 +104,7 @@ const OfertaDetalle = () => {
     }, 3000);
   }
 
-  const handleDespausar = (id:number) => {
+  const handleDespausar = (id: number) => {
     despausarOferta(id)
     setPausada('Oferta despausada')
     recargarOferta()
@@ -95,7 +113,7 @@ const OfertaDetalle = () => {
     }, 3000);
   }
 
-  const handleFinalizar = (id:number) => {
+  const handleFinalizar = (id: number) => {
     finalizarOferta(id)
     setFinalizada('Oferta finalizada')
     recargarOferta()
@@ -103,8 +121,8 @@ const OfertaDetalle = () => {
       setFinalizada('');
     }, 3000);
   }
-  
-  
+
+
 
   if (!oferta) {
     return (
@@ -125,13 +143,13 @@ const OfertaDetalle = () => {
     <Paper
       elevation={6}
       sx={{
-    maxWidth: 960,
-    margin: 'auto',
-    padding: { xs: 2, md: 4 },
-    bgcolor: 'background.paper',
-    borderRadius: 4,
-    boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
-  }}
+        maxWidth: 960,
+        margin: 'auto',
+        padding: { xs: 2, md: 4 },
+        bgcolor: 'background.paper',
+        borderRadius: 4,
+        boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
+      }}
     >
       <Typography
         variant="h4"
@@ -249,92 +267,121 @@ const OfertaDetalle = () => {
 
         {/* Detalles */}
         <Box
-  sx={{
-    flex: 1,
-    minWidth: 280,
-    bgcolor: '#f9f9f9',
-    borderRadius: 3,
-    p: 4,
-    boxShadow: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 2,
-  }}
->
-  <Box>
-    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-      Descripción
-    </Typography>
-    <Typography variant="body1" color="text.primary">
-      {oferta.descripcion}
-    </Typography>
-  </Box>
+          sx={{
+            flex: 1,
+            minWidth: 280,
+            bgcolor: '#f9f9f9',
+            borderRadius: 3,
+            p: 4,
+            boxShadow: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          <Box>
+            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+              Descripción
+            </Typography>
+            <Typography variant="body1" color="text.primary">
+              {oferta.descripcion}
+            </Typography>
+          </Box>
 
-  <Box>
-    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-      Productos a intercambiar
-    </Typography>
-    <Typography variant="body1" color="text.primary">
-      {oferta.cambio}
-    </Typography>
-  </Box>
+          <Box>
+            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+              Productos a intercambiar
+            </Typography>
+            <Typography variant="body1" color="text.primary">
+              {oferta.cambio}
+            </Typography>
+          </Box>
 
-  <Box>
-    <Typography variant="body2" color="text.secondary">
-      <strong>Categoría:</strong> {oferta.categoria.nombre}
-    </Typography>
-    <Typography variant="body2" color="text.secondary">
-      <strong>Fecha de publicación:</strong>{' '}
-      {new Date(oferta.fechaPublicacion).toLocaleDateString('es-AR')}
-    </Typography>
-  </Box>
+          <Box>
+            <Typography variant="body2" color="text.secondary">
+              <strong>Categoría:</strong> {oferta.categoria.nombre}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              <strong>Fecha de publicación:</strong>{' '}
+              {new Date(oferta.fechaPublicacion).toLocaleDateString('es-AR')}
+            </Typography>
+          </Box>
 
-  <Box>
-    <Typography variant="body2" color="text.secondary">
-      <strong>Estado:</strong>{' '}
-      <Box
-        component="span"
-        sx={{
-          color: estadoColor[oferta.estado],
-          fontWeight: 'bold',
-          ml: 1,
-        }}
-      >
-        {oferta.estado}
-      </Box>
-    </Typography>
-  </Box>
+          <Box>
+            <Typography variant="body2" color="text.secondary">
+              <strong>Estado:</strong>{' '}
+              <Box
+                component="span"
+                sx={{
+                  color: estadoColor[oferta.estado],
+                  fontWeight: 'bold',
+                  ml: 1,
+                }}
+              >
+                {oferta.estado}
+              </Box>
+            </Typography>
+          </Box>
 
-  {esPropia && (
-    <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-      <Divider />
-      {oferta.estado === 'ACTIVA' && (
-        <Button variant="contained" color="warning" onClick={() => handlePausar(oferta.id)}>
-          Pausar
-        </Button>
-             
-      )}
-       {pausada && (
+          {esPropia && (
+            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Divider />
+              {oferta.estado === 'ACTIVA' && (
+                <Button variant="contained" color="warning" onClick={() => handlePausar(oferta.id)}>
+                  Pausar
+                </Button>
+
+              )}
+              {pausada && (
                 <Alert severity="info" sx={{ mb: 2 }}>
                   {pausada}
                 </Alert>
               )}
-      {oferta.estado === 'PAUSADA' && (
-        <Button variant="contained" color="success" onClick={() => handleDespausar(oferta.id)}>
-          Despausar
-        </Button>
-      )}
+              {oferta.estado === 'PAUSADA' && (
+                <Button variant="contained" color="success" onClick={() => handleDespausar(oferta.id)}>
+                  Despausar
+                </Button>
+              )}
 
-{oferta.estado !== 'FINALIZADA' && (
-      <Button variant="contained" color="error" onClick={() => handleFinalizar(oferta.id)}>
-        Finalizar
-      </Button>
-      )}
-    </Box>
-  )}
-</Box>
+              {oferta.estado !== 'FINALIZADA' && (
+                <Button variant="contained" color="error" onClick={() => handleFinalizar(oferta.id)}>
+                  Finalizar
+                </Button>
+              )}
+
+
+
+
+
+            </Box>
+          )}
+
+          {!esPropia && oferta.estado === 'ACTIVA' && (
+            <Box sx={{ mt: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setMostrarModal(true)}
+              >
+                Ofrecer intercambio
+              </Button>
+            </Box>
+          )}
+
+
+
+
+        </Box>
 
       </Box>
+
+      <OfrecerModal
+        open={mostrarModal}
+        onClose={() => setMostrarModal(false)}
+        onConfirm={(mensaje) => {handleOfrecer(oferta.id, mensaje)   
+        }}
+      />
+
     </Paper>
   );
 };

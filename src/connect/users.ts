@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const obtenerUsuarios = async () => {
-  const res = await axios.get(`http://localhost:3001/usuarios`,{
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -10,7 +10,7 @@ export const obtenerUsuarios = async () => {
 }
 
 export const obtenerUsuario = async (id:number) => {
-  const res = await axios.get(`http://localhost:3001/usuarios/me`,{
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios/me`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -22,7 +22,7 @@ export const obtenerUsuario = async (id:number) => {
 export const desactivarUsuario = async (id:number) => {
   console.log("intentando desactivar:",id)
   const res = await axios.patch(
-    `http://localhost:3001/usuarios/${id}/desactivar`,
+    `${process.env.NEXT_PUBLIC_BACK_URL}/usuarios/${id}/desactivar`,
     {}, 
     {
       headers: {
@@ -35,7 +35,7 @@ export const desactivarUsuario = async (id:number) => {
 
 export const activarUsuario = async (id:number) => {
   const res = await axios.patch(
-    `http://localhost:3001/usuarios/${id}/activar`,
+    `${process.env.NEXT_PUBLIC_BACK_URL}/usuarios/${id}/activar`,
     {}, 
     {
       headers: {
@@ -49,7 +49,7 @@ export const activarUsuario = async (id:number) => {
 
 export const eliminarUsuario = async (id:number) => {
   const res = await axios.delete(
-    `http://localhost:3001/usuarios/${id}`,
+    `${process.env.NEXT_PUBLIC_BACK_URL}/usuarios/${id}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -60,7 +60,7 @@ export const eliminarUsuario = async (id:number) => {
 }
 
 export const obtenerUsuariosPaginado = async (page = 1, limit = 5) => {
-  const res = await axios.get(`http://localhost:3001/usuarios/paginado?page=${page}&limit=${limit}`, {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios/paginado?page=${page}&limit=${limit}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },

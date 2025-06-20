@@ -22,7 +22,7 @@ export default function CatAdmin({ categorias, onEliminar, onCrear }: Props) {
       <Stack spacing={2} mb={2}>
         {categorias.map((cat, index) => (
           <Paper
-            key={index}
+            key={cat.id}
             sx={{
               p: 2,
               display: 'flex',
