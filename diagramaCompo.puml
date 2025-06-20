@@ -1,0 +1,121 @@
+@startuml diagramaCompo
+
+top to bottom direction
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+package FrontEnd{
+    package PagesLayer{
+        package app{
+            [admin]
+            [contacto]
+            [faq]
+            [login]
+            [ofertas]
+            [perfil]
+            [publicacion]
+            [publicar]
+            [recuperar]
+            [register] as appRegister
+            [main]
+        }
+    }
+
+
+    package UILayer {
+        package components{
+            [BuscarResultados]
+            [catAdmin]
+            [FAQContent]
+            [Footer]
+            [Header]
+            [Login]
+            [Main]
+            [MainCard]
+            [Menu]
+            [modal]
+            [modalReporte]
+            [Publicar]
+            [Recuperar]
+            [Register]
+            [reportesAdmin]
+            [SelectTag]
+            [usuariosAdmin]
+        }
+
+        package containers{
+            [AdminCategoriasContainer]
+            [AdminReportesContainer]
+            [AdminUsuariosContainer]
+        }
+
+        package hooks{
+            [useAuth]
+            [useCategorias]
+            [useReportes]
+            [useUsuarios]
+        }
+
+    }
+
+    package DataAccessLayer{
+        package connect{
+            [auth]
+            [categorias]
+            [favs]
+            [ofertas] as connectOfertas
+            [register] as connectRegister
+            [reporte]
+            [users]
+        }
+    }
+
+
+    package interfaces{
+        [Categoria]
+        [Etiqueta]
+        [Oferta]
+        [Props]
+        [reporte]
+        [TokenPayLoad]
+        [Usuario]
+    }
+}
+
+package BackendAPI
+
+' Desglosamos únicamente las conexiones principales
+
+' connect
+connect --> BackendAPI
+admin --> auth
+publicacion --> auth
+Main --> auth
+useAuth --> auth
+Login --> auth
+Menu --> auth
+Register --> auth
+Recuperar --> auth
+Publicar --> categorias
+SelectTag --> categorias
+AdminCategoriasContainer --> categorias
+useCategorias --> categorias
+MainCard --> favs
+perfil --> favs
+perfil --> connectOfertas
+Main --> connectOfertas
+BuscarResultados --> connectOfertas
+MainCard --> connectOfertas
+publicacion --> connectOfertas
+Publicar --> connectOfertas
+Login --> connectRegister
+Register --> connectRegister
+appRegister --> connectRegister
+MainCard --> reporte
+useReportes --> reporte
+useUsuarios --> users
+perfil --> users
+usuariosAdmin --> users
+
+
+@enduml
