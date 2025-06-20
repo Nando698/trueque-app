@@ -46,7 +46,7 @@ export default function BuscarResultados() {
         <p>No se encontraron ofertas.</p>
       ) : (
         ofertas.map((oferta) => (
-          <OfferCard key={oferta.id} data={oferta} />
+          <OfferCard key={oferta.id} data={oferta} actions={true} />
         ))
       )}
     </main>

@@ -1,6 +1,5 @@
-"use client";
 
-import OfferCard from "../../components/MainCard";
+'use client'
 import { obtenerFavoritos } from "@/connect/favs";
 import { obtenerOfertasPropias } from "@/connect/ofertas";
 import { obtenerUsuario } from "@/connect/users";
@@ -21,6 +20,9 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { aceptarOfrecimiento, obtenerOfrecimientosEnviados, obtenerOfrecimientosRecibidos, rechazarOfrecimiento } from '@/connect/ofrecimientos';
 import { Ofrecimiento } from '@/interfaces/Ofrecimiento';
+import PerfilOfrecimientosRecibidosContainer from "../../containers/PerfilOfrecimientosRecibidosContainer";
+import MiniCard from "@/components/MiniCard";
+
 
 
 
@@ -30,8 +32,10 @@ const Perfil: React.FC = () => {
   const [favoritos, setFavoritos] = useState<Oferta[] | null>(null);
   const [perfil, setPerfil] = useState<Usuario | null>(null);
   const [pausadas, setPausadas] = useState<Oferta[] | null>(null);
-  const [enviados, setEnviados] = useState<Ofrecimiento[] | null>(null);
+  const [enviados, setEnviados] = useState<Ofrecimiento[]>();
   const [ofrecimientosRecibidos, setOfrecimientosRecibidos] = useState<Ofrecimiento[] | null>(null);
+  const [mensajeContacto, setMensajeContacto] = useState<string | null>(null);
+
 
 
   const scrollRef1 = useRef<HTMLDivElement>(null!);
@@ -47,19 +51,40 @@ const Perfil: React.FC = () => {
     setUserId(id);
 
 
-    obtenerOfrecimientosRecibidos().then((ofrecimientos) => {ofrecimientos.filter(o => o.estado !== 'PENDIENTE')});
+    obtenerOfrecimientosRecibidos()
+      .then(ofrecimientos => {
+        console.log("OFRECIMIENTOS", ofrecimientos)
+        const pendientes = ofrecimientos.filter(o => o.estado === 'PENDIENTE');
+        setOfrecimientosRecibidos(pendientes);
+      })
+      .catch(console.error);
 
 
-    obtenerOfrecimientosEnviados().then(setEnviados);
+    obtenerOfrecimientosEnviados().then(ofrecimientos => {
+      const activos = ofrecimientos.filter(o => o.oferta.estado === 'ACTIVA' && o.estado === 'PENDIENTE');
+      setEnviados(activos);
+      console.log("filtrados activos:", activos);
+    })
+      .catch(console.error);
+
+
+
+    obtenerFavoritos()
+      .then(({ data }) => {
+        const activas = data.filter((o: { estado: string; }) => o.estado === 'ACTIVA');
+        setFavoritos(activas);
+      })
+      .catch(console.error);
+
+
     obtenerUsuario(id).then(setPerfil);
     obtenerOfertasPropias(id, "ACTIVA").then(setOfertasPropias);
-    obtenerOfertasPropias(id, "PAUSADA").then(setPausadas);
-    obtenerFavoritos().then(({ data }) => {
-      setFavoritos(data);
+    obtenerOfertasPropias(id, "PAUSADA").then(setPausadas); 
 
-
-    });
   }, []);
+
+
+  
 
   const scroll = (ref: React.RefObject<HTMLDivElement>, dir: "left" | "right") => {
     if (ref.current) {
@@ -70,25 +95,8 @@ const Perfil: React.FC = () => {
   };
 
 
-  const handleAceptar = async (id: number) => {
-    try {
-      const data = await aceptarOfrecimiento(id);
-      setOfrecimientosRecibidos(prev => prev?.filter(ofr => ofr.id !== id) || []);
-      console.log(ofrecimientosRecibidos?.[0].mensaje)
-    } catch (err) {
-      console.error("Error al aceptar:", err);
-    }
-  };
   
-  const handleRechazar = async (id: number) => {
-    try {
-      await rechazarOfrecimiento(id);
-      setOfrecimientosRecibidos(prev => prev?.filter(o => o.id !== id) || []);
-    } catch (err) {
-      console.error('Error al rechazar ofrecimiento:', err);
-    }
-  };
-  
+
 
 
   return (
@@ -126,7 +134,7 @@ const Perfil: React.FC = () => {
               >
                 {ofertasPropias.map((oferta) => (
                   <Box key={oferta.id} sx={{ minWidth: 300, flexShrink: 0 }}>
-                    <Link href={`/publicacion/${oferta.id}`}> <OfferCard data={oferta} actions={false} /></Link>
+                    <Link href={`/publicacion/${oferta.id}`}> <MiniCard oferta={oferta} /></Link>
 
                   </Box>
                 ))}
@@ -163,7 +171,7 @@ const Perfil: React.FC = () => {
               >
                 {favoritos?.map((oferta) => (
                   <Box key={oferta.id} sx={{ minWidth: 300, flexShrink: 0 }}>
-                    <Link href={`/publicacion/${oferta.id}`}><OfferCard data={oferta} actions={false} /></Link>
+                    <Link href={`/publicacion/${oferta.id}`}><MiniCard oferta={oferta} /></Link>
                   </Box>
                 ))}
               </Box>
@@ -197,7 +205,7 @@ const Perfil: React.FC = () => {
               >
                 {pausadas?.map((oferta) => (
                   <Box key={oferta.id} sx={{ minWidth: 300, flexShrink: 0 }}>
-                    <Link href={`/publicacion/${oferta.id}`}><OfferCard data={oferta} actions={false} /></Link>
+                    <Link href={`/publicacion/${oferta.id}`}><MiniCard oferta={oferta} /></Link>
                   </Box>
                 ))}
               </Box>
@@ -235,7 +243,7 @@ const Perfil: React.FC = () => {
                   return (
                     <Box key={ofrec.id} sx={{ minWidth: 300, flexShrink: 0 }}>
                       <Link href={`/publicacion/${ofrec.oferta.id}`}>
-                        <OfferCard data={ofrec.oferta} actions={false} />
+                      <MiniCard oferta={ofrec.oferta} />
                       </Link>
                     </Box>
                   );
@@ -254,40 +262,7 @@ const Perfil: React.FC = () => {
         <Divider sx={{ my: 4 }} />
 
         {ofrecimientosRecibidos && ofrecimientosRecibidos.length > 0 ? (
-          <section className="mt-8">
-            <Typography variant="h6" color="black" gutterBottom>
-              Ofrecimientos recibidos en tus publicaciones
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {ofrecimientosRecibidos.map((ofrec) => (
-                <Box key={ofrec.id} className="bg-white p-4 rounded shadow">
-                  <Typography color="black">
-                    Te hicieron una oferta sobre <strong>{ofrec.oferta.titulo}</strong>
-                  </Typography>
-                  <Typography color="black">
-                    Usuario: {ofrec.usuario.nombre} - Mensaje: "{ofrec.mensaje}"
-                  </Typography>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    color="success"
-                    onClick={() => handleAceptar(ofrec.id)}
-                  >
-                    Aceptar
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    color="error"
-                    onClick={() => handleRechazar(ofrec.id)}
-                  >
-                    Rechazar
-                  </Button>
-                </Box>
-
-              ))}
-            </Box>
-          </section>
+          <PerfilOfrecimientosRecibidosContainer />
         ) : (
           <Typography variant="h6" color="black" gutterBottom>
             No recibiste ofrecimientos todavía.
