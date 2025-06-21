@@ -62,6 +62,15 @@ DB_PASSWORD=****
 PORT=****
 ```
 
+### 3. Instalar los paquetes
+```bash
+npm i
+```
+### 4. Ejecutar el Back
+```bash
+npm run start
+```
+
 ## 🧪 Funcionalidades principales
 - Registro e inicio de sesión de usuarios
 
