@@ -71,7 +71,7 @@ export default function UsuariosAdmin({
                                         try {
                                             await desactivarUsuario(user.id);
                                             mostrarSnackbar(`Usuario "${user.nombre}" desactivado`);
-                                        } catch (error) {
+                                        } catch  {
                                             mostrarSnackbar(`Error al desactivar "${user.nombre}"`);
                                         }
                                     }}

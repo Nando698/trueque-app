@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 import Image from 'next/image';
-import { obtenerIdActual, validarToken } from '@/connect/auth';
+import { validarToken } from '@/connect/auth';
 import { borrarOferta, despausarOferta, finalizarOferta, obtenerUnaOferta, pausarOferta } from '@/connect/ofertas';
 import { useParams } from 'next/navigation';
 import { Oferta } from '@/interfaces/Oferta';
@@ -30,10 +30,10 @@ import { crearOfrecimiento } from '@/connect/ofrecimientos';
 const OfertaDetalle = () => {
   const [oferta, setOferta] = useState<Oferta | null>(null);
   const [imagenActiva, setImagenActiva] = useState(0);
-  const cambiarImagen = (i: number) => setImagenActiva(i);
+  
   const [esPropia, setEsPropia] = useState(false);
   const [pausada, setPausada] = useState('');
-  const [finalizada, setFinalizada] = useState('');
+  
   const [mostrarModal, setMostrarModal] = useState(false);
   const [esAdmin, setEsADmin] = useState(false);
 
@@ -59,10 +59,10 @@ const OfertaDetalle = () => {
 
       const token = localStorage.getItem("token");
 
-      
+
       const decoded = token ? jwtDecode<TokenPayload>(token) : null;
       setEsADmin(decoded?.rol === "ADMIN");
-    
+
       try {
         const ofertaCargada = await obtenerUnaOferta(id);
         setOferta(ofertaCargada);
@@ -80,19 +80,13 @@ const OfertaDetalle = () => {
   const handleEliminar = async (id: number) => {
     try {
       await borrarOferta(id);
-     
+
     } catch (e) {
       console.error(e);
-    } }
-
-  const recargarOferta = async () => {
-    try {
-      const ofertaCargada = await obtenerUnaOferta(id);
-      setOferta(ofertaCargada);
-    } catch (error) {
-      console.error('Error al recargar la oferta:', error);
     }
-  };
+  }
+
+  
 
 
   const handleOfrecer = async (id: number, msj: string) => {
@@ -100,39 +94,52 @@ const OfertaDetalle = () => {
       crearOfrecimiento(id, msj)
         .then(() => {
           setMostrarModal(false);
-          })
+        })
         .catch((err) => console.error('Error al crear ofrecimiento:', err));
     }
-    
+
   }
 
 
-  const handlePausar = (id: number) => {
-    pausarOferta(id)
-    setPausada('Oferta pausada')
-    recargarOferta()
-    setTimeout(() => {
-      setPausada('');
-    }, 3000);
-  }
+  const handlePausar = async (id: number) => {
+    try {
+      await pausarOferta(id);                              
+      setOferta(prev =>
+        prev ? { ...prev, estado: 'PAUSADA' } : prev       
+      );
+      setPausada('Oferta pausada');                        
+      setTimeout(() => setPausada(''), 3000);              
+    } catch (err) {
+      console.error('Error al pausar oferta:', err);
+    }
+  };
 
-  const handleDespausar = (id: number) => {
-    despausarOferta(id)
-    setPausada('Oferta despausada')
-    recargarOferta()
-    setTimeout(() => {
-      setPausada('');
-    }, 3000);
-  }
+  const handleDespausar = async (id: number) => {
+    try {
+      await despausarOferta(id);                           
+      setOferta(prev =>
+        prev ? { ...prev, estado: 'ACTIVA' } : prev        
+      );
+      setPausada('Oferta despausada');                      
+      setTimeout(() => setPausada(''), 3000);              
+    } catch (err) {
+      console.error('Error al despausar oferta:', err);
+    }
+  };
 
-  const handleFinalizar = (id: number) => {
-    finalizarOferta(id)
-    setFinalizada('Oferta finalizada')
-    recargarOferta()
-    setTimeout(() => {
-      setFinalizada('');
-    }, 3000);
-  }
+  const handleFinalizar = async (id: number) => {
+    try {
+      await finalizarOferta(id);                             
+      setOferta(prev => prev
+        ? { ...prev, estado: 'FINALIZADA' }                  
+        : prev
+      );
+                        
+                  
+    } catch (err) {
+      console.error('Error finalizando oferta:', err);
+    }
+  };
 
 
 
@@ -198,84 +205,129 @@ const OfertaDetalle = () => {
               mb: 2,
             }}
           >
-            <Image
-              src={oferta.imagenes[imagenActiva]}
-              alt={`Imagen ${imagenActiva + 1}`}
-              fill
-              style={{ objectFit: 'contain' }}
-            />
+            
+           {/* Dentro de tu JSX, donde va el bloque de imágenes */}
+{!oferta.imagenes || oferta.imagenes.length === 0 ? (
+  // Caso “no hay imágenes”
+  <Box
+    sx={{
+      flex: 1,
+      minWidth: 280,
+      height: 240,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      bgcolor: '#f0f0f0',
+      borderRadius: 2,
+      color: 'gray',
+    }}
+  >
+    Sin imágenes
+  </Box>
+) : (
+  // Caso “hay al menos una imagen”
+  <Box
+    sx={{
+      flex: 1,
+      minWidth: 280,
+      bgcolor: 'white',
+      borderRadius: 2,
+      p: 2,
+      boxShadow: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}
+  >
+    {/* Imagen principal y flechas */}
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height: 240,
+        borderRadius: 2,
+        overflow: 'hidden',
+        mb: 2,
+      }}
+    >
+      <Image
+        src={oferta.imagenes[imagenActiva]}
+        alt={`Imagen ${imagenActiva + 1}`}
+        fill
+        style={{ objectFit: 'contain' }}
+      />
 
-            {imagenActiva > 0 && (
-              <Box
-                onClick={() => setImagenActiva(imagenActiva - 1)}
-                sx={{
-                  position: 'absolute',
-                  left: 8,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: 'white',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  borderRadius: '50%',
-                  p: '4px',
-                }}
-              >
-                <ArrowBackIosNewIcon />
-              </Box>
-            )}
-
-            {imagenActiva < oferta.imagenes.length - 1 && (
-              <Box
-                onClick={() => setImagenActiva(imagenActiva + 1)}
-                sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  color: 'white',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  borderRadius: '50%',
-                  p: '4px',
-                }}
-              >
-                <ArrowForwardIosIcon />
-              </Box>
-            )}
-          </Box>
-
-          {oferta.imagenes.length > 1 && (
-            <ImageList cols={3} gap={8} sx={{ width: '100%' }}>
-              {oferta.imagenes.map((img, i) => (
-                <ImageListItem
-                  key={i}
-                  sx={{
-                    cursor: 'pointer',
-                    position: 'relative',
-                    height: 60,
-                    opacity: i === imagenActiva ? 1 : 0.6,
-                    transition: 'opacity 0.3s',
-                  }}
-                  onClick={() => cambiarImagen(i)}
-                >
-                  <Image
-                    src={img}
-                    alt={`Miniatura ${i + 1}`}
-                    fill
-                    style={{
-                      borderRadius: 6,
-                      border:
-                        i === imagenActiva
-                          ? '3px solid #1976d2'
-                          : '1px solid #ccc',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          )}
+      {imagenActiva > 0 && (
+        <Box
+          onClick={() => setImagenActiva(imagenActiva - 1)}
+          sx={{
+            position: 'absolute',
+            left: 8,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            cursor: 'pointer',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            borderRadius: '50%',
+            p: '4px',
+          }}
+        >
+          <ArrowBackIosNewIcon htmlColor="white" />
         </Box>
+      )}
+
+      {imagenActiva < oferta.imagenes.length - 1 && (
+        <Box
+          onClick={() => setImagenActiva(imagenActiva + 1)}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            cursor: 'pointer',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            borderRadius: '50%',
+            p: '4px',
+          }}
+        >
+          <ArrowForwardIosIcon htmlColor="white" />
+        </Box>
+      )}
+    </Box>
+
+    {/* Miniaturas sólo si hay más de una */}
+    {oferta.imagenes.length > 1 && (
+      <ImageList cols={3} gap={8} sx={{ width: '100%' }}>
+        {oferta.imagenes.map((img, i) => (
+          <ImageListItem
+            key={i}
+            sx={{
+              cursor: 'pointer',
+              height: 60,
+              opacity: i === imagenActiva ? 1 : 0.6,
+              transition: 'opacity 0.3s',
+            }}
+            onClick={() => setImagenActiva(i)}
+          >
+            <Image
+              src={img}
+              alt={`Miniatura ${i + 1}`}
+              fill
+              style={{
+                borderRadius: 6,
+                border:
+                  i === imagenActiva ? '3px solid #1976d2' : '1px solid #ccc',
+                objectFit: 'cover',
+              }}
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    )}
+  </Box>
+)}
+
+  </Box>
+  </Box>
 
         {/* Detalles */}
         <Box
@@ -360,7 +412,7 @@ const OfertaDetalle = () => {
                   Finalizar
                 </Button>
               )}
-
+              
 
 
 
@@ -380,11 +432,11 @@ const OfertaDetalle = () => {
             </Box>
           )}
           {esAdmin && (
-            
-              <Button color="error" size="small" onClick={() => handleEliminar(oferta.id)}>
-                Eliminar
-              </Button>
-            )}
+
+            <Button color="error" size="small" onClick={() => handleEliminar(oferta.id)}>
+              Eliminar
+            </Button>
+          )}
 
 
 
@@ -396,7 +448,8 @@ const OfertaDetalle = () => {
       <OfrecerModal
         open={mostrarModal}
         onClose={() => setMostrarModal(false)}
-        onConfirm={(mensaje) => {handleOfrecer(oferta.id, mensaje)   
+        onConfirm={(mensaje) => {
+          handleOfrecer(oferta.id, mensaje)
         }}
       />
 

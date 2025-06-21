@@ -11,7 +11,7 @@ export function useReportes(onError?: (msg: string) => void) {
       try {
         const res = await obtenerReportes();
         setReportes(res.data);
-      } catch (error) {
+      } catch  {
         
         if (onError) onError('Error al obtener reportes');
       } finally {

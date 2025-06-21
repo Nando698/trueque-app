@@ -1,95 +1,119 @@
-# 📦 Trueque App
+# Trueque App
 
-Aplicación web para publicar, buscar e intercambiar artículos entre usuarios. El sistema permite a los usuarios registrarse, gestionar sus publicaciones, marcar favoritas, enviar ofrecimientos a otras personas y la aplicación posee un panel administrador para gestionar tanto los usuarios, como las categorías y actuar frente a los reportes de los usuarios.
-
----
-
-## 🚀 Tecnologías
-
-### Frontend
-- **Next.js** (App Router)
-- **React**
-- **TypeScript**
-- **Material UI (MUI)**
-- **Axios**
-
-### Backend
-- **NestJS**
-- **TypeScript**
-- **PostgreSQL**
-- **TypeORM**
-- **JWT (autenticación)**
+**Aplicación de trueque** construida con **Next.js** (frontend) y **NestJS** (backend).
 
 ---
 
-## ⚙️ Configuración del entorno
+## 📋 Tabla de Contenidos
 
-### Configuración del FrontEnd
+1. [Requisitos](#requisitos)
+2. [Instalación](#instalación)
+3. [Variables de Entorno](#variables-de-entorno)
+4. [Ejecutar Backend](#ejecutar-backend)
+5. [Ejecutar Frontend](#ejecutar-frontend)
+6. [Uso de la Aplicación](#uso-de-la-aplicación)
+7. [Endpoints Principales (API)](#endpoints-principales-api)
+8. [Scripts Útiles](#scripts-útiles)
+9. [Licencia](#licencia)
 
-### 1. Clonar el repositorio
+---
+
+## 🚀 Requisitos
+
+* **Node.js** 
+* **npm**
+* **PostgreSQL** corriendo localmente
+
+---
+
+## 🛠️ Instalación
+
+1. Clonar el repositorio:
+
+   ```bash
+   git clone <URL_DEL_REPO>
+
+      FRONT: https://github.com/Nando698/trueque-app
+      BACK: https://github.com/Nando698/trueque-app-backend
+   
+   ```
+2. Instalar dependencias:
+
+   ```bash
+   npm install      
+   ```
+
+---
+
+## 🔐 Variables de Entorno
+
+1. Copiar el ejemplo:
+
+   ```bash
+   cp .env.example .env
+   ```
+2. Editar `.env`:
+
+   ```dotenv
+  DB_HOST=localhost
+  DB_PORT= 
+  DB_USERNAME=
+  DB_PASSWORD=
+  DB_NAME=trueque
+  PORT=3001
+   ```
+
+---
+
+## 🖥️ Ejecutar Backend
+
 ```bash
-git clone https://github.com/tu-usuario/trueque-app.git
+
+npm run start 
+
 ```
-### 2. Configurar tu .env.local
-Configurar en la raiz de tu proyecto el archivo *.env.local*
+
+* El backend estará en: `http://localhost:3001` por defecto, sino se debe modificar el .env del frontend indicando donde apuntar
+
+---
+
+## 🌐 Ejecutar Frontend
+
 ```bash
-NEXT_PUBLIC_BACK_URL=http://localhost:3001
-```
-### 3. Instalar los paquetes
-```bash
-npm i
-```
-### 4. Ejecutar el Front
-```bash
-npm run dev
+
+npm run start      
 ```
 
-### Configuración del Backend
+* El frontend estará en: `http://localhost:3000`
 
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/Nando698/trueque-app-backend.git
-```
+---
 
-### 2. Configurar tu .env
-Configurar en la raiz de tu proyecto el archivo *.env* con las credenciales de tu DB (DataBase)
-```bash
-DB_HOST=****
-DB_PORT=****
-DB_USERNAME=****
-DB_NAME=****
-DB_PASSWORD=****
-PORT=****
-```
+## 🔎 Uso de la Aplicación
 
-### 3. Instalar los paquetes
-```bash
-npm i
-```
-### 4. Ejecutar el Back
-```bash
-npm run start
-```
+1. Abra el navegador en `http://localhost:3000`.
+2. Registre una cuenta o inicie sesión usando email y contraseña.
+3. En el panel de usuario, podrá:
 
-## 🧪 Funcionalidades principales
-- Registro e inicio de sesión de usuarios
+   * **Crear una oferta:** complete título, descripción, suba imágenes y seleccione categoría.
+   * **Ver ofertas propias:** edite, pause o finalice las ofertas existentes.
+   * **Navegar ofertas:** explore y filtre por categoría o estado.
+   * **Enviar contraofertas:** en la página de detalle de una oferta, envíe un mensaje proponiendo un intercambio.
+   * **Gestionar recibidos:** en tu perfil, acepta o rechaza contraofertas que otros envíen a tus ofertas.
+   * **Favoritos:** agrega o quita ofertas de tu lista de favoritos.
 
-- Visualización de ofertas públicas
+---
 
-- Creación, edición y eliminación de ofertas
 
-- Sistema de favoritos
 
-- Envío y recepción de ofrecimientos
+---
 
-- Panel de administrador (categorías, usuarios y reportes)
+## ⚙️ Scripts Útiles
 
-- Reportes de contenido inapropiado
+| Comando                  | Descripción                            |
+| ------------------------ | -------------------------------------- |
+| `npm run test`   | Ejecuta tests de backend (Jest)                |
 
-- Búsqueda filtrada por palabra clave y categoría
 
-👨‍💻 Autores
 
-[Fernando Diaz]
+---
 
-[Matias Fredes]

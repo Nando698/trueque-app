@@ -20,8 +20,9 @@ const enviarSolicitud = async () => {
       const data = await solicitarCodigoRecuperacion(correo);
       setMensaje(data.mensaje || 'Código de recuperación generado.');
       setError('');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Error al generar código');
+    } catch {
+      
+      setError('Error al generar código');
       setMensaje('');
     }
   };
@@ -33,7 +34,7 @@ const enviarSolicitud = async () => {
       await cambiarPassword(correo, codigo, nuevaPass);
       
       window.location.href = '/login';
-    } catch (error) {
+    } catch {
       setError('Codigo incorrecto');
       setMensaje('');
       

@@ -9,7 +9,7 @@ export const obtenerUsuarios = async () => {
   return res.data
 }
 
-export const obtenerUsuario = async (id:number) => {
+export const obtenerUsuario = async () => {
   const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios/me`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,

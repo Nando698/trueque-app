@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Card,CardContent, CardMedia, Typography } from '@mui/material';
 import { Oferta } from '@/interfaces/Oferta';
 
 interface MiniCardProps {

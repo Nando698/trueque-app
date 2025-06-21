@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const obtenerOfrecimientosRecibidos = async (): Promise<Ofrecimiento[]> => {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:3001/ofrecimientos/recibidos', {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACK_URL}/ofrecimientos/recibidos`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;

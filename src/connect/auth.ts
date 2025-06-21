@@ -18,7 +18,7 @@ export const validarToken = async (): Promise<boolean> => {
 
     return res.data === true;
   } catch (error) {
-    console.log("Error al validar token",error)
+    console.log("Error al validar token", error)
     return false;
   }
 };
@@ -44,7 +44,7 @@ export const loguearse = async (
 
     return { ok: false, error: 'Token no recibido' };
   } catch (error: any) {
-    // Obtené mensaje del backend o de Axios
+
     const mensaje =
       error?.response?.data?.message || 'Error al iniciar sesión';
     return { ok: false, error: mensaje };
@@ -52,28 +52,28 @@ export const loguearse = async (
 };
 
 
- export const logOut =  () => {
+export const logOut = () => {
 
-    localStorage.removeItem('token')
-    localStorage.removeItem('nombre')
+  localStorage.removeItem('token')
+  localStorage.removeItem('nombre')
 
-    window.location.href = '/login'
+  window.location.href = '/login'
 }
 
-export const registerFunction = async (nombre:string, correo: string, password: string): Promise<void> => {
+export const registerFunction = async (nombre: string, correo: string, password: string): Promise<void> => {
   try {
-     await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios`, {
+    await axios.post(`${process.env.NEXT_PUBLIC_BACK_URL}/usuarios`, {
       nombre,
-        correo,
+      correo,
       password,
-      rol:'NORMAL',
+      rol: 'NORMAL',
       estado: 'ACTIVO'
     });
-    
-    
+
+
   } catch (error) {
     console.log(error);
-    
+
   }
 
 
@@ -97,13 +97,13 @@ export const cambiarPassword = async (correo: string, codigo: string, nuevaPass:
   return response.data;
 };
 
-export const obtenerIdActual =  () => {
+export const obtenerIdActual = () => {
   const token = localStorage.getItem('token')
 
-  if(token){
+  if (token) {
     const decoded = token ? jwtDecode<TokenPayload>(token) : null;
     return decoded?.sub;
-  }else{
+  } else {
     return false
   }
 

@@ -1,6 +1,6 @@
-// components/BasicMenu.tsx
 
-'use client'; // si usás Next.js App Router
+
+'use client'; 
 
 import React, { useEffect, useState } from 'react';
 import { Menu, MenuItem, Button } from '@mui/material';
@@ -72,7 +72,5 @@ export default BasicMenu;
 
 
 
-function setEsAdmin(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
+
 

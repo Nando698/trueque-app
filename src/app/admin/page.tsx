@@ -23,7 +23,11 @@ import AdminCategoriasContainer from '@/containers/AdminCategoriasContainer';
 import AdminReportesContainer from '@/containers/AdminReportesContainer';
 
 export default function AdminPage() {
-  const [seccionActiva, setSeccionActiva] = useState<'usuarios' | 'categorias' | 'reportes'>('usuarios');
+ 
+  type Seccion = 'usuarios' | 'publicaciones' | 'categorias' | 'reportes';
+  const secciones: Seccion[] = ['usuarios', 'categorias', 'reportes'];
+  
+  const [seccionActiva, setSeccionActiva] = useState<Seccion>('usuarios');
   const [sidebarAbierto, setSidebarAbierto] = useState(true);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState<string>('');
@@ -61,11 +65,11 @@ export default function AdminPage() {
             <Typography variant="h6">Admin</Typography>
           </Box>
           <List>
-            {['usuarios', 'categorias', 'reportes'].map((sec) => (
+            {secciones.map((sec) => (
               <ListItem disablePadding key={sec}>
                 <ListItemButton
                   selected={seccionActiva === sec}
-                  onClick={() => setSeccionActiva(sec as any)}
+                  onClick={() => setSeccionActiva(sec)}
                 >
                   <ListItemText primary={`Gestión de ${sec}`} />
                 </ListItemButton>

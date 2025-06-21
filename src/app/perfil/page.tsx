@@ -13,12 +13,12 @@ import {
   IconButton,
   Divider,
   Link,
-  Button,
+  
 } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import { aceptarOfrecimiento, obtenerOfrecimientosEnviados, obtenerOfrecimientosRecibidos, rechazarOfrecimiento } from '@/connect/ofrecimientos';
+import { obtenerOfrecimientosEnviados, obtenerOfrecimientosRecibidos} from '@/connect/ofrecimientos';
 import { Ofrecimiento } from '@/interfaces/Ofrecimiento';
 import PerfilOfrecimientosRecibidosContainer from "../../containers/PerfilOfrecimientosRecibidosContainer";
 import MiniCard from "@/components/MiniCard";
@@ -27,14 +27,14 @@ import MiniCard from "@/components/MiniCard";
 
 
 const Perfil: React.FC = () => {
-  const [userId, setUserId] = useState<number | null>(null);
+  
   const [ofertasPropias, setOfertasPropias] = useState<Oferta[] | null>(null);
   const [favoritos, setFavoritos] = useState<Oferta[] | null>(null);
   const [perfil, setPerfil] = useState<Usuario | null>(null);
   const [pausadas, setPausadas] = useState<Oferta[] | null>(null);
   const [enviados, setEnviados] = useState<Ofrecimiento[]>();
   const [ofrecimientosRecibidos, setOfrecimientosRecibidos] = useState<Ofrecimiento[] | null>(null);
-  const [mensajeContacto, setMensajeContacto] = useState<string | null>(null);
+  
 
 
 
@@ -48,7 +48,7 @@ const Perfil: React.FC = () => {
 
     const decoded = jwtDecode<TokenPayload>(token);
     const id = decoded.sub;
-    setUserId(id);
+    
 
 
     obtenerOfrecimientosRecibidos()
@@ -77,7 +77,7 @@ const Perfil: React.FC = () => {
       .catch(console.error);
 
 
-    obtenerUsuario(id).then(setPerfil);
+    obtenerUsuario().then(setPerfil);
     obtenerOfertasPropias(id, "ACTIVA").then(setOfertasPropias);
     obtenerOfertasPropias(id, "PAUSADA").then(setPausadas); 
 
