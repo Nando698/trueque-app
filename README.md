@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📦 Trueque App
 
-## Getting Started
+Aplicación web para publicar, buscar e intercambiar artículos entre usuarios. El sistema permite a los usuarios registrarse, gestionar sus publicaciones, marcar favoritas, enviar ofrecimientos a otras personas y la aplicación posee un panel administrador para gestionar tanto los usuarios, como las categorías y actuar frente a los reportes de los usuarios.
 
-First, run the development server:
+---
 
+## 🚀 Tecnologías
+
+### Frontend
+- **Next.js** (App Router)
+- **React**
+- **TypeScript**
+- **Material UI (MUI)**
+- **Axios**
+
+### Backend
+- **NestJS**
+- **TypeScript**
+- **PostgreSQL**
+- **TypeORM**
+- **JWT (autenticación)**
+
+---
+
+## ⚙️ Configuración del entorno
+
+### Configuración del FrontEnd
+
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/tu-usuario/trueque-app.git
+```
+### 2. Configurar tu .env.local
+Configurar en la raiz de tu proyecto el archivo *.env.local*
+```bash
+NEXT_PUBLIC_BACK_URL=http://localhost:3001
+```
+### 3. Instalar los paquetes
+```bash
+npm i
+```
+### 4. Ejecutar el Front
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Configuración del Backend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/Nando698/trueque-app-backend.git
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Configurar tu .env
+Configurar en la raiz de tu proyecto el archivo *.env* con las credenciales de tu DB (DataBase)
+```bash
+DB_HOST=****
+DB_PORT=****
+DB_USERNAME=****
+DB_NAME=****
+DB_PASSWORD=****
+PORT=****
+```
 
-## Learn More
+## 🧪 Funcionalidades principales
+- Registro e inicio de sesión de usuarios
 
-To learn more about Next.js, take a look at the following resources:
+- Visualización de ofertas públicas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Creación, edición y eliminación de ofertas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Sistema de favoritos
 
-## Deploy on Vercel
+- Envío y recepción de ofrecimientos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Panel de administrador (categorías, usuarios y reportes)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Reportes de contenido inapropiado
+
+- Búsqueda filtrada por palabra clave y categoría
+
+👨‍💻 Autores
+
+[Fernando Diaz]
+
+[Matias Fredes]

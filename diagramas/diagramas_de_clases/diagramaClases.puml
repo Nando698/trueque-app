@@ -183,17 +183,17 @@ BuscarResultados  *--  Oferta
 
 Perfil  *--  Usuario
 Perfil  *--  Oferta
-Perfil ..> TokenPayload
+Perfil ..> TokenPayLoad
 Perfil ..> Ofrecimiento
 
 
 ' OfertaDetalle
 OfertaDetalle  *--  Oferta
-OfertaDetalle ..> TokenPayload
+OfertaDetalle ..> TokenPayLoad
 
 ' PublicarOferta
 PublicarOferta  *--  Categoria
-PublicarOferta ..> TokenPayload
+PublicarOferta ..> TokenPayLoad
 
 
 'loginPage
@@ -207,7 +207,7 @@ Register ..> LoginPage
 
 ' OfferCard (MainCard)
 Main ..> OfferCard
-OfferCard ..> TokenPayload
+OfferCard ..> TokenPayLoad
 OfferCard ..> Oferta
 
 
