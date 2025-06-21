@@ -19,7 +19,10 @@ export default function BuscarResultados() {
     const fetchOfertas = async () => {
       try {
         const data = await buscarOfertas(categoriaId ?? undefined, keywords ?? undefined);
-        setOfertas(data);
+
+        const activas = data.filter((oferta: Oferta) => oferta.estado === 'ACTIVA');
+        console.log("data:", data, "activas", activas)
+        setOfertas(activas)
       } catch (err) {
         console.error('Error buscando ofertas:', err);
       }
