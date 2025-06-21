@@ -1,0 +1,215 @@
+@startuml diagramaClases
+
+note as N1
+En el siguiente diagrama unicamente se muestran las clases principales y
+sus variables, metodos y relaciones que no forman parte del diseño de la misma
+end note
+
+Interface Usuario{
+    +id: number
+    +nombre: string
+    +correo: string
+    +password: string
+    +rol: "ADMIN" | "REGULAR"
+    +estado: "ACTIVO" | "INACTIVO"
+    +fecha_creacion: string
+}
+
+Interface Oferta{
+    +id: number
+    +titulo: string
+    +descripcion: string
+    +cambio: string
+    +imagenes: string[]
+    +categoria: Categoria
+    +fechaPublicacion: string
+    +estado: string
+    +usuario: Usuario
+}
+
+Interface Ofrecimiento{
+    +id: number;
+    +mensaje: string;
+    +estado: string;
+    +usuario: Usuario;
+    +oferta: Oferta;
+    +contacto: { nombre: string, correo: string, telefono: string}?
+}
+
+Interface Props{
++usuarios: Usuario[];
++paginaActual: number;
++totalPaginas: number;
++setPaginaActual: (pagina: number) => void;
+}
+
+Interface Categoria{
++id: number
++nombre: string
+}
+
+interface Reporte{
++id: number;
++usuario: Usuario;
++oferta: Oferta;
++motivo: string;
++fechaReporte: string;
+}
+
+interface TokenPayLoad{
++sub: number;
++email: string;
++rol: string;
+}
+
+class Main{
+- ofertas: Oferta[]
++useEffect(): void
+}
+
+class AdminPage {
+- seccionActiva: string
++ useEffect(): void
+}
+
+class LoginPage {
+- email: string
+- password: string
+- error: string
++ manejarSubmit(): void
+}
+
+class BuscarResultados{
+- ofertas: Oferta[]
+useEffect(): void
+}
+
+class Perfil{
+- userId: number | null
+- ofertasPropias: Oferta[] | null
+- favoritos: Oferta[] | null
+- perfil: Usuario | null
+- pausadas: Oferta[] | null
+- enviados: Ofrecimiento[]
+- ofrecimientosRecibidos: Ofrecimiento[]| null
++ useEffect(): void
+}
+
+class OfertaDetalle {
+- oferta: Oferta | null
+- imagenActiva: number
+- esPropia: boolean
+- pausada: string
+- finalizada: string
+- esAdmin: boolean
++ useEffect(): void
++ handleEliminar(): void
++ recargarOferta(): void
++ handleOfrecer(): void
++ handlePausar(): void
++ handleDespausar(): void
++ handleFinalizar(): void
+}
+
+class PublicarOferta {
+- titulo: string
+- descripcion: string
+- cambio: string
+- files: FileList
+- categorias: Categoria[]
+- categoria: number
+- userId: number
++ handleSubmit(e: FormEvent): void
++ handleFileChange(e: ChangeEvent): void
++ removeImage(index: number): void
++ useEffect(): void
++ useEffect(): void
+}
+
+class Recuperar{
+- correo: string
+- mensaje: string
+- error: string
+- codigo: string
+- nuevaPass: string
+
++ enviarSolicitud(): void
++ handleSubmit(e: FormEvent): void
+}
+
+class Register{
+- name: string
+- email: string
+- password: string
++ manejarSubmit(e: FormEvent): void
+}
+
+class OfferCard{
+- esAdmin: boolean
+- soloFecha: string
+- imagenes : string[]
+- maxSteps: number
+- activeStep: number
+- agregadoFav: string
++ useEffect(): void
++ handleNext(): void
++ handleBack(): void
++ handleReportar(): void
++ handleFav(): void
+}
+
+' RELACIONES
+
+' Main
+Main  *--  Oferta
+
+' adminPage
+
+AdminPage  *--  Usuario
+AdminPage  *--  Categoria
+AdminPage  *--  Reporte
+
+Reporte  -->  Usuario
+Reporte  -->  Oferta
+
+Oferta  -->  Categoria
+Oferta  -->  Usuario
+
+' BuscarResultados
+
+BuscarResultados  *--  Oferta
+
+' Perfil
+
+Perfil  *--  Usuario
+Perfil  *--  Oferta
+Perfil ..> TokenPayLoad
+Perfil ..> Ofrecimiento
+
+
+' OfertaDetalle
+OfertaDetalle  *--  Oferta
+OfertaDetalle ..> TokenPayLoad
+
+' PublicarOferta
+PublicarOferta  *--  Categoria
+PublicarOferta ..> TokenPayLoad
+
+
+'loginPage
+LoginPage ..> Main
+
+'Recuperar
+Recuperar ..> LoginPage
+
+'Register
+Register ..> LoginPage
+
+' OfferCard (MainCard)
+Main ..> OfferCard
+OfferCard ..> TokenPayLoad
+OfferCard ..> Oferta
+
+
+
+@enduml

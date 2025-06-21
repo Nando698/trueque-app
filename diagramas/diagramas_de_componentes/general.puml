@@ -1,0 +1,103 @@
+@startuml diagramaGeneral
+
+note as N1
+  Este diagrama muestra las conexiones entre las Capas del FrontEnd
+end note
+
+top to bottom direction
+skinparam componentStyle rectangle
+skinparam linetype ortho
+
+package FrontEnd{
+    package PagesLayer{
+        package app{
+            [admin]
+            [contacto]
+            [faq]
+            [login]
+            [ofertas]
+            [perfil]
+            [publicacion]
+            [publicar]
+            [recuperar]
+            [register]
+            [main]
+        }
+    }
+
+
+    package UILayer {
+        package components{
+            [BuscarResultados]
+            [catAdmin]
+            [FAQContent]
+            [Footer]
+            [Header]
+            [Login]
+            [Main]
+            [MainCard]
+            [Menu]
+            [MiniCard]
+            [modal]
+            [modalReporte]
+            [OfrecerModal]
+            [OfrecimientosRecibidos]
+            [Publicar]
+            [Recuperar]
+            [Register]
+            [reportesAdmin]
+            [SelectTag]
+            [usuariosAdmin]
+        }
+
+        package containers{
+            [AdminCategoriasContainer]
+            [AdminReportesContainer]
+            [AdminUsuariosContainer]
+            [PerfilOfrecimientosRecibidosContainer]
+        }
+
+        package hooks{
+            [useAuth]
+            [useCategorias]
+            [useReportes]
+            [useUsuarios]
+        }
+
+    }
+
+    package DataAccessLayer{
+        package connect{
+            [auth]
+            [categorias]
+            [favs]
+            [ofertas]
+            [reporte]
+            [users]
+        }
+    }
+
+
+    package interfaces{
+        [Categoria]
+        [Oferta]
+        [Ofrecimiento1]
+        [Props]
+        [reporte]
+        [TokenPayLoad]
+        [Usuario]
+    }
+}
+
+package BackendAPI
+
+' relaciones
+
+PagesLayer --> UILayer : "utiliza"
+UILayer --> DataAccessLayer : "utiliza"
+DataAccessLayer --> BackendAPI: "consume"
+
+
+
+
+@enduml
