@@ -64,6 +64,11 @@ package FrontEnd {
         Formulario para crear una nueva cuenta de usuario
       end note
 
+      [terminos]
+      note top of [terminos]
+        Página con los términos y condiciones del sitio
+      end note
+
       [main]
       note top of [main]
         Página principal del sitio con la totalidad de las ofertas
@@ -170,6 +175,11 @@ package FrontEnd {
       [SelectTag]
       note top of [SelectTag]
         Selector con múltiples categorías/tags filtrables
+      end note
+
+      [Terminos]
+      note top of [Terminos]
+        Componente que muestra los términos y condiciones del sitio
       end note
 
       [usuariosAdmin]

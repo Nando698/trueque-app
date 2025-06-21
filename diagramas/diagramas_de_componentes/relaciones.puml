@@ -23,6 +23,7 @@ package FrontEnd{
             [publicar]
             [recuperar]
             [register]
+            [terminos]
             [main]
         }
     }
@@ -49,6 +50,7 @@ package FrontEnd{
             [Register]
             [reportesAdmin]
             [SelectTag]
+            [Terminos]
             [usuariosAdmin]
         }
 
