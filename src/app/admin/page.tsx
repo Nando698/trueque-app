@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { validarToken } from '@/connect/auth';
+import { useState, useEffect } from "react";
+import { validarToken } from "@/connect/auth";
 import {
   Box,
   Container,
@@ -16,21 +16,31 @@ import {
   IconButton,
   Snackbar,
   Alert,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AdminUsuariosContainer from '@/containers/AdminUsuariosContainer';
-import AdminCategoriasContainer from '@/containers/AdminCategoriasContainer';
-import AdminReportesContainer from '@/containers/AdminReportesContainer';
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import AdminUsuariosContainer from "@/containers/AdminUsuariosContainer";
+import AdminCategoriasContainer from "@/containers/AdminCategoriasContainer";
+import AdminReportesContainer from "@/containers/AdminReportesContainer";
+import AdminContactosContainer from "@/containers/AdminContactosContainer";
 
 export default function AdminPage() {
- 
-  type Seccion = 'usuarios' | 'publicaciones' | 'categorias' | 'reportes';
-  const secciones: Seccion[] = ['usuarios', 'categorias', 'reportes'];
-  
-  const [seccionActiva, setSeccionActiva] = useState<Seccion>('usuarios');
+  type Seccion =
+    | "usuarios"
+    | "publicaciones"
+    | "categorias"
+    | "reportes"
+    | "contacto";
+  const secciones: Seccion[] = [
+    "usuarios",
+    "categorias",
+    "reportes",
+    "contacto",
+  ];
+
+  const [seccionActiva, setSeccionActiva] = useState<Seccion>("usuarios");
   const [sidebarAbierto, setSidebarAbierto] = useState(true);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState<string>('');
+  const [snackbarMsg, setSnackbarMsg] = useState<string>("");
 
   const mostrarSnackbar = (mensaje: string) => {
     setSnackbarMsg(mensaje);
@@ -41,12 +51,14 @@ export default function AdminPage() {
 
   useEffect(() => {
     validarToken().then((valido) => {
-      if (!valido) window.location.href = '/login';
+      if (!valido) window.location.href = "/login";
     });
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: '#0d1b2a', minHeight: '100vh', display: 'flex' }}>
+    <Box
+      sx={{ backgroundColor: "#0d1b2a", minHeight: "100vh", display: "flex" }}
+    >
       {sidebarAbierto && (
         <Drawer
           variant="permanent"
@@ -55,9 +67,9 @@ export default function AdminPage() {
             flexShrink: 0,
             [`& .MuiDrawer-paper`]: {
               width: 240,
-              boxSizing: 'border-box',
-              backgroundColor: '#1b263b',
-              color: 'white',
+              boxSizing: "border-box",
+              backgroundColor: "#1b263b",
+              color: "white",
             },
           }}
         >
@@ -80,7 +92,7 @@ export default function AdminPage() {
       )}
 
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ backgroundColor: '#1b263b' }}>
+        <AppBar position="static" sx={{ backgroundColor: "#1b263b" }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -97,15 +109,16 @@ export default function AdminPage() {
         </AppBar>
 
         <Container maxWidth="md" sx={{ py: 4 }}>
-          {seccionActiva === 'usuarios' && (
+          {seccionActiva === "usuarios" && (
             <AdminUsuariosContainer onError={mostrarSnackbar} />
           )}
-          {seccionActiva === 'categorias' && (
+          {seccionActiva === "categorias" && (
             <AdminCategoriasContainer onError={mostrarSnackbar} />
           )}
-          {seccionActiva === 'reportes' && (
+          {seccionActiva === "reportes" && (
             <AdminReportesContainer onError={mostrarSnackbar} />
           )}
+          {seccionActiva === "contacto" && <AdminContactosContainer />}
         </Container>
       </Box>
 
@@ -113,9 +126,13 @@ export default function AdminPage() {
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           {snackbarMsg}
         </Alert>
       </Snackbar>
