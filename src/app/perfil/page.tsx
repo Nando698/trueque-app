@@ -36,11 +36,11 @@ const Perfil: React.FC = () => {
   const [ofrecimientosRecibidos, setOfrecimientosRecibidos] = useState<Ofrecimiento[] | null>(null);
   
 
-
-
   const scrollRef1 = useRef<HTMLDivElement>(null!);
   const scrollRef2 = useRef<HTMLDivElement>(null!);
   const scrollRef3 = useRef<HTMLDivElement>(null!);
+  const scrollRef4 = useRef<HTMLDivElement>(null!);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -194,7 +194,7 @@ const Perfil: React.FC = () => {
             <Box display="flex" alignItems="center">
               <IconButton onClick={() => scroll(scrollRef3, "left")}> <ArrowBackIos /> </IconButton>
               <Box
-                ref={scrollRef1}
+                ref={scrollRef3}
                 sx={{
                   display: "flex",
                   overflowX: "auto",
@@ -209,7 +209,7 @@ const Perfil: React.FC = () => {
                   </Box>
                 ))}
               </Box>
-              <IconButton onClick={() => scroll(scrollRef1, "right")}> <ArrowForwardIos /> </IconButton>
+              <IconButton onClick={() => scroll(scrollRef3, "right")}> <ArrowForwardIos /> </IconButton>
             </Box>
           </section>
 
@@ -227,9 +227,9 @@ const Perfil: React.FC = () => {
               Publicaciones contraofertadas por mí
             </Typography>
             <Box display="flex" alignItems="center">
-              <IconButton onClick={() => scroll(scrollRef3, "left")}> <ArrowBackIos /> </IconButton>
+              <IconButton onClick={() => scroll(scrollRef4, "left")}> <ArrowBackIos /> </IconButton>
               <Box
-                ref={scrollRef3}
+                ref={scrollRef4}
                 sx={{
                   display: "flex",
                   overflowX: "auto",
@@ -250,7 +250,7 @@ const Perfil: React.FC = () => {
                 })}
 
               </Box>
-              <IconButton onClick={() => scroll(scrollRef3, "right")}> <ArrowForwardIos /> </IconButton>
+              <IconButton onClick={() => scroll(scrollRef4, "right")}> <ArrowForwardIos /> </IconButton>
             </Box>
           </section>
         ) : (
