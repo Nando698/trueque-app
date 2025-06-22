@@ -44,7 +44,10 @@ const Perfil: React.FC = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
 
     const decoded = jwtDecode<TokenPayload>(token);
     const id = decoded.sub;
